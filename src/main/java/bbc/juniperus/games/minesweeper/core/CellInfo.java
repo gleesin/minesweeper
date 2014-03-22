@@ -12,4 +12,5 @@ public interface CellInfo {
 	boolean hasMine();
 	boolean hasFlag();
 	int getsetNearbyMinesCount();
+	boolean wasMineHit();
 }

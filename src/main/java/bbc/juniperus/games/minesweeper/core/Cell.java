@@ -6,6 +6,7 @@ class Cell {
 	private boolean mine;
 	private boolean flagged;
 	private boolean revealed;
+	private boolean wasMineHit;
 	private int nearbyMinesCount = -1;
 	
 	//Testing & debugging purposes.
@@ -55,6 +56,10 @@ class Cell {
 		this.nearbyMinesCount = nearbyMinesCount;
 	}
 
+	void mineWasHit(){
+		wasMineHit = true;
+	}
+	
 	@Override
 	public String toString(){
 		String mineStr = mine?"mine!":"";
@@ -62,6 +67,8 @@ class Cell {
 		return Cell.class.getSimpleName() +  " [" + 
 				+ coordinate.x + ", " + coordinate.y +"] " + mineStr + ", " + flaggedStr +",  dbugId: " + debugId;
 	}
+	
+	
 	
 	CellInfo getCellInfo(){
 		return new CellInfo(){
@@ -83,12 +90,17 @@ class Cell {
 
 			@Override
 			public boolean hasFlag() {
-				return Cell.this.hasMine();
+				return Cell.this.hasFlag();
 			}
 
 			@Override
 			public int getsetNearbyMinesCount() {
 				return Cell.this.getNearbyMinesCount();
+			}
+			
+			@Override
+			public boolean wasMineHit() {
+				return wasMineHit;
 			}
 		};
 	}

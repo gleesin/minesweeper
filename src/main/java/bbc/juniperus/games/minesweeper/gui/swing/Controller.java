@@ -2,9 +2,11 @@ package bbc.juniperus.games.minesweeper.gui.swing;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import bbc.juniperus.games.minesweeper.core.Coordinate;
 import bbc.juniperus.games.minesweeper.core.MineField;
 
 public class Controller implements PropertyChangeListener {
@@ -20,28 +22,30 @@ public class Controller implements PropertyChangeListener {
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName() == CellGui.REVELAED_PROPERTY)
-			cellRevelaed((CellGui)evt.getSource());
+		if (evt.getPropertyName() == CellGui.REVEALED_PROPERTY)
+			cellRevealed((CellGui)evt.getSource());
+		if (evt.getPropertyName() == CellGui.FLAG_SET_PROPERTY)
+			cellFlagChanged((CellGui)evt.getSource(), (boolean)evt.getNewValue());
 		
 	}
 	
 	
-	private void cellRevelaed(CellGui cell){
+	private void cellRevealed(CellGui cell){
 		System.out.println(cell.getCoordinate());
-		boolean hitMine = field.revealCell(cell.getCoordinate().x, cell.getCoordinate().y);
+		List<Coordinate> newlyRevealedCells = field.revealCell(cell.getCoordinate());
 		
-		if (hitMine){
-			gameOver();
+		pane.update(newlyRevealedCells);
+		if (field.isGameOver()){
+			//gameOver();
 			return;
 		}
-		
 		System.out.println(field.debugImg());
-		pane.update();
-		
 	}
 	
-	private void cellFlagged(){
-		
+	private void cellFlagChanged(CellGui cell, boolean flagIsSet){
+		System.out.println("cell flag changed " + flagIsSet);
+		field.setFlagged(cell.getCoordinate(), flagIsSet);
+		pane.update(cell.getCoordinate());
 	}
 	
 	
