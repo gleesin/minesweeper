@@ -5,6 +5,7 @@ class Cell {
 	private Coordinate coordinate;
 	private boolean mine;
 	private boolean flagged;
+	private boolean questionMark;
 	private boolean revealed;
 	private boolean wasMineHit;
 	private int nearbyMinesCount = -1;
@@ -60,6 +61,15 @@ class Cell {
 		wasMineHit = true;
 	}
 	
+	
+	boolean hasQuestionMark() {
+		return questionMark;
+	}
+
+	void setHasQuestionMark(boolean hasQuestionMark) {
+		this.questionMark = hasQuestionMark;
+	}
+
 	@Override
 	public String toString(){
 		String mineStr = mine?"mine!":"";
@@ -102,6 +112,12 @@ class Cell {
 			public boolean wasMineHit() {
 				return wasMineHit;
 			}
+			
+			@Override
+			public boolean hasQuestionMark() {
+				return questionMark;
+			}
+			
 		};
 	}
 	

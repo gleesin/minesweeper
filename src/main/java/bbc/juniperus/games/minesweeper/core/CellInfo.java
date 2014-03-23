@@ -13,4 +13,5 @@ public interface CellInfo {
 	boolean hasFlag();
 	int getsetNearbyMinesCount();
 	boolean wasMineHit();
+	boolean hasQuestionMark();
 }

@@ -27,7 +27,7 @@ public class MineFieldPane extends JPanel{
 			for (int x = 0; x < field.getWidth(); x++){
 				CellInfo info = field.getCellInfo(x, y);
 				CellGui cell = new CellGui(info);
-				cell.addPropertyChangeListener(controller);
+				cell.addListener(controller);
 				add(cell);
 				cells.put(info.getCoordinate(),cell);
 			}

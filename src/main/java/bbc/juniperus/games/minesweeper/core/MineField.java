@@ -71,7 +71,7 @@ public class MineField {
 	}
 	
 	public List<Coordinate> revealCell(Coordinate coordinate){
-		
+	
 		if (coordinate.x < 0 || coordinate.x >= columnsCount)
 			throw new IllegalArgumentException("Coordinate.x is not within bounds 0 - " + (columnsCount-1));
 		if (coordinate.y < 0 || coordinate.y >= rowsCount)
@@ -79,7 +79,9 @@ public class MineField {
 		
 		Cell cell = cells.get(coordinate);
 		
-		newlyRevealedCells.clear();
+		if (cell.hasFlag())
+			throw new IllegalStateException("Cannot reveal flagged cell");
+
 		if (cell.hasMine()){
 			cell.mineWasHit();
 			List<Coordinate> mineCoordinates = new ArrayList<Coordinate>();
@@ -99,9 +101,12 @@ public class MineField {
 	}
 	
 	
-	public void setFlagged(Coordinate coordinate, boolean isFlagged){
+	public void setFlag(Coordinate coordinate, boolean isFlagged){
 		cells.get(coordinate).setHasFlag(isFlagged);
-		System.out.println(cells.get(coordinate).hasFlag());
+	}
+	
+	public void setQuestionMark(Coordinate coordinate, boolean hasQuestionmark){
+		cells.get(coordinate).setHasQuestionMark(hasQuestionmark);
 	}
 	
 	private Cell getCell(int x, int y){
@@ -174,13 +179,9 @@ public class MineField {
 		
 		cell.setNearbyMinesCount(mineCount);
 	}
-	
-	
-	
-	
-	
+		
 	/**
-	 * Reveals the cell and also its neighbors if the cell has no mine in neighborhood.
+	 * Reveals the cell and also recusrively its neighbors if the cell has no mine in neighborhood.
 	 * Cell is revealed only if condition <b>{@link Cell#hasMine()} == <code>true</code> </b> holds true. 
 	 * If the cell does not have any mine-carrying neighbors the uncover operation is spread recursively to
 	 * all of its neighbors eventually stopping at the cells near the mine or at the side of the minefield.
@@ -188,16 +189,18 @@ public class MineField {
 	 */
 	private void uncoverCell(Cell cell){
 		
-		if (cell.isRevealed()) //Ignore if it has been already uncovered (also prevents endless loop).
+		if (cell.isRevealed()) //Ignore if it has been already uncovered (also prevents stackoverflow cycle).
 			return;
 		
 		cell.reveal();
+		cell.setHasQuestionMark(false); //Ensure the question mark is not present after being uncovered.
 		newlyRevealedCells.add(cell.getCoordinate()); //Add to the list of revealed cells.
 		
-		if (cell.getNearbyMinesCount() > 0) //Contains mine in neighborhood - do not uncover.
+		
+		if (cell.getNearbyMinesCount() > 0) //Contains mine in neighborhood - do not uncover the neighbors.
 			return;
 		
-		//Uncover all neighbours as the cell has no mine in the neighborhood
+		//Uncover all neighbors as the cell has no mine in the neighborhood
 		for (int y = -1; y < 2; y++)
 			for (int x = -1 ; x < 2; x++){
 				if (y == 0 && x == 0) //These are the 'cell' coordinates - no need to check yourself.

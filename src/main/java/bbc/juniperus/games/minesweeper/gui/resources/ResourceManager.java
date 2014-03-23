@@ -21,11 +21,14 @@ public class ResourceManager {
 	private static final String PATH_NUMBERS = "numbers.png";
 	private static final String PATH_MINES = "mines.png";
 	private static final String PATH_FLAG = "flag.png";
+	private static final String PATH_QUESTION_MARK = "question_mark.png";
 	private static final int MINE_FIELD_NUMBER_SPRITE_WIDTH = 20;
 	private static final int MINE_SPRITE_WIDTH = 26;
 	private static final int FLAG_SPRITE_WIDTH = 16;
+	private static final int QUESTION_MARK_SPRITE_WIDTH = 12;
+	
 	private Image[] imagesNumbers = new Image[8]; 
-	private Image imgMine, imgCrossedMine, imgFlag;
+	private Image imgMine, imgCrossedMine, imgFlag, imgQuestionMark;
 	
 	private static ResourceManager instance;
 	private boolean initialized;
@@ -58,7 +61,8 @@ public class ResourceManager {
 		try {
 			loadMineNumberImages();
 			loadMineImages();
-			loadFlagImage();
+			imgFlag = loadImg(PATH_FLAG);
+			imgQuestionMark = loadImg(PATH_QUESTION_MARK);
 		} catch (URISyntaxException | IOException e) {
 			e.printStackTrace();
 			throw new ResourceLoadingException("Icons could not be loaded", e);
@@ -104,21 +108,34 @@ public class ResourceManager {
 		return getScaledImageIcon(imgCrossedMine, scaleFactor); 
 	}
 	
-	public Icon createFlagIcon(int width){
+	public Image getFlagImage(int width){
 		checkIfInitialized();
 		float  scaleFactor = ((float) width )/ FLAG_SPRITE_WIDTH; 
 		
-		return getScaledImageIcon(imgFlag, scaleFactor); 
+		return getScaledImage(imgFlag, scaleFactor); 
+	}
+	
+	public Image getQuestionMarkImage(int width){
+		checkIfInitialized();
+		float  scaleFactor = ((float) width )/ QUESTION_MARK_SPRITE_WIDTH; 
+		
+		return getScaledImage(imgQuestionMark, scaleFactor); 
 	}
 	
 	
+	
 	private Icon getScaledImageIcon(Image originalImg, float scaleFactor){
+		return new ImageIcon(getScaledImage(originalImg,scaleFactor));
+	}
+	
+	private Image getScaledImage(Image originalImg, float scaleFactor){
 		int h = Math.round(scaleFactor * originalImg.getHeight(null));
 		int w = Math.round(scaleFactor  * originalImg.getWidth(null));
 		Image newImg = originalImg.getScaledInstance(w, h, BufferedImage.SCALE_SMOOTH);
 		
-		return new ImageIcon(newImg);
+		return newImg;
 	}
+	
 	
 	/**
 	 * Routine for verifying whether the resource manager has been initialized.
@@ -154,14 +171,13 @@ public class ResourceManager {
 		int height = img.getHeight();
 		
 		imgMine=  img.getSubimage(0,0, MINE_SPRITE_WIDTH, height);
-		imgCrossedMine=  img.getSubimage(MINE_SPRITE_WIDTH ,0 ,MINE_SPRITE_WIDTH, height);
+		imgCrossedMine= img.getSubimage(MINE_SPRITE_WIDTH ,0 ,MINE_SPRITE_WIDTH, height);
 	}
 	
-	private void loadFlagImage() throws IOException, URISyntaxException{
-		URL url = getClass().getResource(PATH_FLAG);
+	private Image loadImg(String path) throws URISyntaxException, IOException{
+		URL url = getClass().getResource(path);
 		File f = new File(url.toURI());
-		imgFlag = ImageIO.read(f);
+		return ImageIO.read(f);
 	}
-	
 	
 }

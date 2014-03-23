@@ -1,8 +1,11 @@
 package bbc.juniperus.games.minesweeper.gui.swing;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import bbc.juniperus.games.minesweeper.core.MineField;
 import bbc.juniperus.games.minesweeper.gui.resources.ResourceLoadingException;
@@ -33,6 +36,14 @@ public class Main {
 		window.setSize(WIDTH, HEIGHT);
 		window.setLayout(new FlowLayout());
 		window.add(new MineFieldPane(new MineField(20, 20)));
+		
+		/*
+		JPanel pan = new JPanel();
+		pan.setBackground(Color.yellow);
+		pan.setPreferredSize(new Dimension(200,200));
+		window.add(pan);*/
+		
+		
 	}
 	
 	
