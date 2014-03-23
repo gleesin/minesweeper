@@ -9,11 +9,12 @@ import bbc.juniperus.games.minesweeper.core.MineField;
 public class Controller implements CellGuiListener{
 
 	private MineField field; 
-	private MineFieldPane pane;
-	
-	public Controller(MineField field, MineFieldPane pane){
+	private GameView gamePane;
+
+	public Controller(MineField field, GameView gamePane){
 		this.field = field;
-		this.pane = pane;
+		this.gamePane = gamePane;
+		gamePane.initialize(field, this);
 	}
 	
 	private void gameOver(){
@@ -28,7 +29,7 @@ public class Controller implements CellGuiListener{
 			return;
 		
 		List<Coordinate> newlyRevealedCells = field.revealCell(coordinate);
-		pane.update(newlyRevealedCells);
+		gamePane.updateMineField(newlyRevealedCells);
 		if (field.isGameOver()){
 			//gameOver();
 			return;
@@ -52,8 +53,7 @@ public class Controller implements CellGuiListener{
 			field.setFlag(coordinate, true);
 		}
 		
-		
-		pane.update(coordinate);
+		gamePane.updateMineField(coordinate);
 		
 	}
 

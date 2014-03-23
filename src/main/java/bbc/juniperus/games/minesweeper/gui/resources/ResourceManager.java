@@ -108,18 +108,19 @@ public class ResourceManager {
 		return getScaledImageIcon(imgCrossedMine, scaleFactor); 
 	}
 	
-	public Image getFlagImage(int width){
+
+	public Icon createFlagIcon(int width){
 		checkIfInitialized();
 		float  scaleFactor = ((float) width )/ FLAG_SPRITE_WIDTH; 
 		
-		return getScaledImage(imgFlag, scaleFactor); 
+		return getScaledImageIcon(imgFlag, scaleFactor); 
 	}
 	
-	public Image getQuestionMarkImage(int width){
+	public Icon createQuestionMarkIcon(int width){
 		checkIfInitialized();
 		float  scaleFactor = ((float) width )/ QUESTION_MARK_SPRITE_WIDTH; 
 		
-		return getScaledImage(imgQuestionMark, scaleFactor); 
+		return getScaledImageIcon(imgQuestionMark, scaleFactor); 
 	}
 	
 	

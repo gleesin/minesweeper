@@ -33,10 +33,15 @@ public class Main {
 	private void createGui(){
 		window = new JFrame();
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		window.setSize(WIDTH, HEIGHT);
+		//window.setSize(WIDTH, HEIGHT);
 		window.setLayout(new FlowLayout());
-		window.add(new MineFieldPane(new MineField(20, 20)));
 		
+		MineField mineField = new MineField(15,15);
+		GameView gamePane = new GameView();
+		Controller controller = new Controller(mineField, gamePane);
+		
+		window.add(gamePane);
+		window.pack();
 		/*
 		JPanel pan = new JPanel();
 		pan.setBackground(Color.yellow);

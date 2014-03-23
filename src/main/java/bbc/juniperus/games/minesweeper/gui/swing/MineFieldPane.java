@@ -17,12 +17,9 @@ public class MineFieldPane extends JPanel{
 
 	private Map<Coordinate,CellGui> cells = new HashMap<Coordinate,CellGui>();
 	
-	
-	public MineFieldPane(MineField field){
-		super(new GridLayout(field.getWidth(),field.getHeight()));
-		
-		Controller controller = new Controller(field,this);
-		
+
+	public void fillWithCells(MineField field, Controller controller){
+		setLayout(new GridLayout(field.getWidth(),field.getHeight()));
 		for (int y = 0; y < field.getHeight(); y++)
 			for (int x = 0; x < field.getWidth(); x++){
 				CellInfo info = field.getCellInfo(x, y);
@@ -31,10 +28,8 @@ public class MineFieldPane extends JPanel{
 				add(cell);
 				cells.put(info.getCoordinate(),cell);
 			}
-			
-			
 	}
-	
+
 	public void update(List<Coordinate> coordinates) {
 		//Update relevant cell gui's according to the model.
 		//This will also mark them for repainting by this container.
@@ -48,4 +43,6 @@ public class MineFieldPane extends JPanel{
 		cells.get(coordinate).update(); 
 		repaint();
 	}
+	
+	
 }
