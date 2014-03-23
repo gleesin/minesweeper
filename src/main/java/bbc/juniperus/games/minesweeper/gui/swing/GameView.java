@@ -2,6 +2,7 @@ package bbc.juniperus.games.minesweeper.gui.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -23,8 +24,8 @@ public class GameView extends JPanel{
 	private static final Border INSIDE_BORDER = BorderFactory.createLineBorder(MAIN_COLOR,5);
 	private static final Border BORDER = BorderFactory.createCompoundBorder(OUTSIDE_BORDER, INSIDE_BORDER);
 	
-	UpperPane upperPane;
-	MineFieldPane mineFieldPane;
+	private UpperPane upperPane;
+	private MineFieldPane mineFieldPane;
 	
 	
 	public GameView() {
@@ -50,6 +51,10 @@ public class GameView extends JPanel{
 	
 	public void updateMineField(Coordinate coordinate){
 		mineFieldPane.update(coordinate);
+	}
+	
+	public void addFaceButtonListener(ActionListener listener){
+		upperPane.addFaceButtonListener(listener);
 	}
 	
 }

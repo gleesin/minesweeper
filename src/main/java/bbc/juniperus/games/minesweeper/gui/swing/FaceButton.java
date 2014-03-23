@@ -6,12 +6,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 
 @SuppressWarnings("serial")
-public class FaceButton extends JPanel{
+public class FaceButton extends JButton{
 
 	private static final Border INSIDE_BORDER = new CellBorder(2,GameView.LIGHT_COLOR,GameView.DARK_COLOR);
 	private static final Border INSIDE_BORDER_PRESSED = BorderFactory.createMatteBorder(1, 1, 0, 0, GameView.DARK_COLOR);
@@ -23,19 +24,21 @@ public class FaceButton extends JPanel{
 	public FaceButton() {
 		setBorder(BORDER);
 		setBackground(GameView.MAIN_COLOR);
+		setContentAreaFilled(false);
 		
+		//Mouse listener for changing the look accordingly,
 		addMouseListener(new MouseAdapter(){
 			
 			
 			@Override
 			public void mousePressed(MouseEvent e){
+				setBackground(GameView.MAIN_COLOR);
 				setBorder(BORDER_PRESSED);
 			}
 			
 			@Override
 			public void mouseReleased(MouseEvent e){
 				setBorder(BORDER);
-		;
 			}
 			
 		});

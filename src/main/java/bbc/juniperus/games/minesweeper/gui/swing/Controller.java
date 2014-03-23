@@ -1,7 +1,11 @@
 package bbc.juniperus.games.minesweeper.gui.swing;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
+
 import javax.swing.JOptionPane;
+
 import bbc.juniperus.games.minesweeper.core.CellInfo;
 import bbc.juniperus.games.minesweeper.core.Coordinate;
 import bbc.juniperus.games.minesweeper.core.MineField;
@@ -15,6 +19,15 @@ public class Controller implements CellGuiListener{
 		this.field = field;
 		this.gamePane = gamePane;
 		gamePane.initialize(field, this);
+		
+		gamePane.addFaceButtonListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Button was pressed");
+			}
+			
+		});
 	}
 	
 	private void gameOver(){
