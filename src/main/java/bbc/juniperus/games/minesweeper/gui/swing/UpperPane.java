@@ -20,7 +20,7 @@ public class UpperPane extends JPanel{
 		setBorder(BORDER);
 		
 		FaceButton b = new FaceButton();
-		add(b);
+		add(new Display());
 		
 		
 	}

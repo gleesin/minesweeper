@@ -32,7 +32,7 @@ public class CellGui extends JPanel {
 	
 	private static final Border border = new CellBorder(BORDER_WIDTH, GameView.LIGHT_COLOR, colorBorder);
 	private static final Border borderRevealed = BorderFactory.createMatteBorder(1, 1, 0, 0, colorBorder);
-	private static final Icon[] numberIcons = ResourceManager.getInstance().createFieldNumberIcons(10);
+	private static final Icon[] numberIcons = ResourceManager.getInstance().createMineFieldNumberIcons(10);
 	private static final Icon mineIcon = ResourceManager.getInstance().createMineIcon(13);
 	private static final Icon crossedMineIcon = ResourceManager.getInstance().createCrossedMineIcon(13);
 	private static final Icon questionMarkIcon = ResourceManager.getInstance().createQuestionMarkIcon(6);

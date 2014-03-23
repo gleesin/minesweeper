@@ -18,16 +18,19 @@ import javax.swing.ImageIcon;
  */
 public class ResourceManager {
 
-	private static final String PATH_NUMBERS = "numbers.png";
+	private static final String PATH_MINEFIELD_NUMBERS = "numbers.png";
+	private static final String PATH_DISPLAY_NUMBERS = "display.png";
 	private static final String PATH_MINES = "mines.png";
 	private static final String PATH_FLAG = "flag.png";
 	private static final String PATH_QUESTION_MARK = "question_mark.png";
-	private static final int MINE_FIELD_NUMBER_SPRITE_WIDTH = 20;
-	private static final int MINE_SPRITE_WIDTH = 26;
-	private static final int FLAG_SPRITE_WIDTH = 16;
-	private static final int QUESTION_MARK_SPRITE_WIDTH = 12;
 	
-	private Image[] imagesNumbers = new Image[8]; 
+	private static final int MINEFIELD_NUMBER_IMG_WIDTH = 20;
+	private static final int DISPLAY_NUMBER_IMG_WIDTH = 26;
+	private static final int MINE_IMG_WIDTH = 26;
+	private static final int FLAG_IMG_WIDTH = 16;
+	private static final int QUESTION_MARK_IMG_WIDTH = 12;
+
+	private Image[] minefieldNumbers, displayNumbers;
 	private Image imgMine, imgCrossedMine, imgFlag, imgQuestionMark;
 	
 	private static ResourceManager instance;
@@ -59,10 +62,16 @@ public class ResourceManager {
 	public void initialize() throws ResourceLoadingException {
 		
 		try {
-			loadMineNumberImages();
-			loadMineImages();
+			minefieldNumbers = loadImagesFromSprite(PATH_MINEFIELD_NUMBERS ,8, MINEFIELD_NUMBER_IMG_WIDTH);
 			imgFlag = loadImg(PATH_FLAG);
 			imgQuestionMark = loadImg(PATH_QUESTION_MARK);
+			
+			Image[] mines = loadImagesFromSprite(PATH_MINES, MINE_IMG_WIDTH, 2);
+			imgMine = mines[0];
+			imgCrossedMine = mines[1];
+			
+			displayNumbers = loadImagesFromSprite(PATH_DISPLAY_NUMBERS, DISPLAY_NUMBER_IMG_WIDTH, 11);
+			
 		} catch (URISyntaxException | IOException e) {
 			e.printStackTrace();
 			throw new ResourceLoadingException("Icons could not be loaded", e);
@@ -73,37 +82,53 @@ public class ResourceManager {
 	
 	/**
 	 * Returns icons array for mine field numbers for the given icon width. Numbers range from 1 to 8. The icon for number <code>n</code>
-	 * is in the returned array on position <code>n - 1</code>.  The original image width is {@link #MINE_FIELD_NUMBER_SPRITE_WIDTH} and the
+	 * is in the returned array on position <code>n - 1</code>.  The original image width is {@link #MINEFIELD_NUMBER_IMG_WIDTH} and the
 	 * image is scaled based on the proportion of the given width to this original width.<br> 
 	 * 
 	 * @param width the width of the icons
 	 * @return newly created icon array from the mine field number images
 	 */
-	public Icon[] createFieldNumberIcons(int width){
+	public Icon[] createMineFieldNumberIcons(int width){
 		checkIfInitialized();
 		
-		Icon[] icons = new Icon[8]; 
+		Icon[] icons = new Icon[minefieldNumbers.length]; 
 		//Calculate scale factor based on the original and given width ratio. 
-		float  scaleFactor = ((float) width )/ MINE_FIELD_NUMBER_SPRITE_WIDTH; 
+		float  scaleFactor = ((float) width )/ MINEFIELD_NUMBER_IMG_WIDTH; 
 		
-		for (int i = 0; i < imagesNumbers.length; i++) 
-			icons[i] = getScaledImageIcon(imagesNumbers[i], scaleFactor);
+		for (int i = 0; i < minefieldNumbers.length; i++) 
+			icons[i] = getScaledImageIcon(minefieldNumbers[i], scaleFactor);
 		
 		
 		return icons; 
 	}
 	
+	public Icon[] createDisplayNumberIcons(int width){
+		checkIfInitialized();
+		
+		Icon[] icons = new Icon[displayNumbers.length]; 
+		//Calculate scale factor based on the original and given width ratio. 
+		float  scaleFactor = ((float) width )/ DISPLAY_NUMBER_IMG_WIDTH; 
+		
+		for (int i = 0; i < displayNumbers.length; i++) 
+			icons[i] = getScaledImageIcon(displayNumbers[i], scaleFactor);
+		
+		
+		return icons; 
+	}
+	
+	
+	
 	public Icon createMineIcon(int width){
 		checkIfInitialized();
 		//Calculate scale factor based on the original and given width ratio. 
-		float  scaleFactor = ((float) width )/ MINE_SPRITE_WIDTH; 
+		float  scaleFactor = ((float) width )/ MINE_IMG_WIDTH; 
 		
 		return getScaledImageIcon(imgMine, scaleFactor); 
 	}
 
 	public Icon createCrossedMineIcon(int width){
 		checkIfInitialized();
-		float  scaleFactor = ((float) width )/ MINE_SPRITE_WIDTH; 
+		float  scaleFactor = ((float) width )/ MINE_IMG_WIDTH; 
 		
 		return getScaledImageIcon(imgCrossedMine, scaleFactor); 
 	}
@@ -111,14 +136,14 @@ public class ResourceManager {
 
 	public Icon createFlagIcon(int width){
 		checkIfInitialized();
-		float  scaleFactor = ((float) width )/ FLAG_SPRITE_WIDTH; 
+		float  scaleFactor = ((float) width )/ FLAG_IMG_WIDTH; 
 		
 		return getScaledImageIcon(imgFlag, scaleFactor); 
 	}
 	
 	public Icon createQuestionMarkIcon(int width){
 		checkIfInitialized();
-		float  scaleFactor = ((float) width )/ QUESTION_MARK_SPRITE_WIDTH; 
+		float  scaleFactor = ((float) width )/ QUESTION_MARK_IMG_WIDTH; 
 		
 		return getScaledImageIcon(imgQuestionMark, scaleFactor); 
 	}
@@ -148,32 +173,23 @@ public class ResourceManager {
 			throw new IllegalStateException("The resource manager has not been initialized yet.");
 	}
 	
-	/**
-	 * Loads images for number in mine fields.
-	 * @throws URISyntaxException
-	 * @throws IOException
-	 */
-	private void loadMineNumberImages() throws URISyntaxException, IOException{
-		URL url = getClass().getResource(PATH_NUMBERS);
+	private Image[] loadImagesFromSprite(String imgPath, int width, int count) throws URISyntaxException, IOException{
+		URL url = getClass().getResource(imgPath);
 		File f = new File(url.toURI());
 		BufferedImage img = ImageIO.read(f);
 		
+		Image[] result = new BufferedImage[count];
+		
 		int height = img.getHeight();
-		for (int i = 0; i < imagesNumbers.length; i++) 
-			imagesNumbers[i]=  img.getSubimage(i * MINE_FIELD_NUMBER_SPRITE_WIDTH , 
-					0, MINE_FIELD_NUMBER_SPRITE_WIDTH, height);
+		
+		for (int i = 0; i < count; i++) 
+			result[i]=  img.getSubimage(i * width , 
+					0, width, height);
+		
+		return result;
 	}
 	
-	private void loadMineImages() throws URISyntaxException, IOException{
-		URL url = getClass().getResource(PATH_MINES);
-		File f = new File(url.toURI());
-		BufferedImage img = ImageIO.read(f);
-		
-		int height = img.getHeight();
-		
-		imgMine=  img.getSubimage(0,0, MINE_SPRITE_WIDTH, height);
-		imgCrossedMine= img.getSubimage(MINE_SPRITE_WIDTH ,0 ,MINE_SPRITE_WIDTH, height);
-	}
+	
 	
 	private Image loadImg(String path) throws URISyntaxException, IOException{
 		URL url = getClass().getResource(path);
