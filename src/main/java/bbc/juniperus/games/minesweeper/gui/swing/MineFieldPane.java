@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 
 import bbc.juniperus.games.minesweeper.core.CellInfo;
 import bbc.juniperus.games.minesweeper.core.Coordinate;
@@ -16,10 +17,12 @@ public class MineFieldPane extends JPanel{
 	private static final long serialVersionUID = 1L;
 
 	private Map<Coordinate,CellGui> cells = new HashMap<Coordinate,CellGui>();
-	
+	private static final Border BORDER = new CellBorder(3,GameView.DARK_COLOR, GameView.LIGHT_COLOR); 
 
 	public void fillWithCells(MineField field, Controller controller){
 		setLayout(new GridLayout(field.getWidth(),field.getHeight()));
+		setBorder(BORDER);
+		
 		for (int y = 0; y < field.getHeight(); y++)
 			for (int x = 0; x < field.getWidth(); x++){
 				CellInfo info = field.getCellInfo(x, y);

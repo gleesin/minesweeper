@@ -5,28 +5,17 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Insets;
 
-import javax.swing.border.AbstractBorder;
 import javax.swing.border.Border;
 
 public class CellBorder implements Border{
 
 	private int borderWidth;
-	private Color colorLight,colorDark;
-	private static final int factor = 56;
-	
-	public CellBorder(int width, Color colorBackground){
+	private Color topLeftColor,bottomRightColor;
+
+	public CellBorder(int width, Color topLeft, Color bottomRight){
 		borderWidth = width;
-		
-		
-		colorDark = new Color( colorBackground.getRed() - factor,
-				colorBackground.getGreen() - factor,
-				colorBackground.getBlue() - factor
-				);
-		
-		colorLight = new Color( colorBackground.getRed() + factor,
-				colorBackground.getGreen() + factor,
-				colorBackground.getBlue() + factor
-				);		
+		topLeftColor = topLeft;
+		bottomRightColor = bottomRight;
 	}
 	
 	
@@ -34,17 +23,17 @@ public class CellBorder implements Border{
 	public void paintBorder(Component c, Graphics g, int x, int y, int width,
 			int height) {
 		
-		g.setColor(colorLight);
+		g.setColor(topLeftColor);
 		for (int i = 0; i < borderWidth;i ++){
-			g.drawLine(0, i, width -1 -i ,i); //Horizontal line on top
-			g.drawLine(i, 0, i,height - 1 -i); //Vertical line on the left
+			g.drawLine(x, y + i, x + width  - 1 - 1 - i, y + i); //Horizontal line on top
+			g.drawLine(x + i, y, x + i, y + height - 1 - 1 -i); //Vertical line on the left
 		}
 		
-		g.setColor(colorDark);
+		
+		g.setColor(bottomRightColor);
 		for (int i = 0; i < borderWidth; i++){
-			System.out.println(" i is " + i);
-			g.drawLine(i+1,height-i ,width ,height - i); //Horizontal line at the bottom
-			g.drawLine(width - i, i+1, width -i,height); //Vertical line on the right
+			g.drawLine(x + 1 + i, y + height -1 - i, x + width - 1, y + height -  1 - i); //Horizontal line at the bottom
+			g.drawLine(x + width - 1 - i, y + 1 + i, x + width -1 - i, y + height - 1); //Vertical line on the right
 		}
 		
 	}

@@ -34,9 +34,8 @@ public class Main {
 		window = new JFrame();
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//window.setSize(WIDTH, HEIGHT);
-		window.setLayout(new FlowLayout());
 		
-		MineField mineField = new MineField(15,15);
+		MineField mineField = new MineField(16,50);
 		GameView gamePane = new GameView();
 		Controller controller = new Controller(mineField, gamePane);
 		

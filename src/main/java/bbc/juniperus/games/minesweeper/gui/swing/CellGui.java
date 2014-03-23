@@ -22,15 +22,15 @@ import bbc.juniperus.games.minesweeper.gui.resources.ResourceManager;
 @SuppressWarnings("serial")
 public class CellGui extends JPanel {
 
-	public static final int HEIGHT = 18;
+	public static final int HEIGHT = 16;
 	public static final int WIDTH = HEIGHT;
-	private static final int BORDER_WIDTH = 3;
+	private static final int BORDER_WIDTH = 2;
 	public static final Dimension dimension = new Dimension(WIDTH, HEIGHT);
-	private static final Color colorBackground = new Color(189, 189, 189);
+	private static final Color colorBackground = GameView.MAIN_COLOR;
 	private static final Color colorHitMine = Color.red;
-	private static final Color colorBorder =new Color(123, 123, 123);
+	private static final Color colorBorder = GameView.DARK_COLOR;
 	
-	private static final Border border = new CellBorder(BORDER_WIDTH,colorBackground);
+	private static final Border border = new CellBorder(BORDER_WIDTH, GameView.LIGHT_COLOR, colorBorder);
 	private static final Border borderRevealed = BorderFactory.createMatteBorder(1, 1, 0, 0, colorBorder);
 	private static final Icon[] numberIcons = ResourceManager.getInstance().createFieldNumberIcons(10);
 	private static final Icon mineIcon = ResourceManager.getInstance().createMineIcon(13);
@@ -92,6 +92,8 @@ public class CellGui extends JPanel {
 			public void mouseReleased(MouseEvent e) {
 				if (isRevealed) 
 					return;
+				
+				label.setBorder(null);
 				
 				int x = e.getX();
 				int y = e.getY();
