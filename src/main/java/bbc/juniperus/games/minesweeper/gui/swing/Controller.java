@@ -47,6 +47,8 @@ public class Controller implements CellGuiListener{
 			//gameOver();
 			return;
 		}
+		
+		System.out.println(field.debugImg());
 	}
 
 

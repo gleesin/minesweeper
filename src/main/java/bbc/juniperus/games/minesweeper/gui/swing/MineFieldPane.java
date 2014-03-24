@@ -20,8 +20,9 @@ public class MineFieldPane extends JPanel{
 	private static final Border BORDER = new CellBorder(3,GameView.DARK_COLOR, GameView.LIGHT_COLOR); 
 
 	public void fillWithCells(MineField field, Controller controller){
-		setLayout(new GridLayout(field.getWidth(),field.getHeight()));
+		setLayout(new GridLayout(field.getHeight(),field.getWidth()));
 		setBorder(BORDER);
+		
 		
 		for (int y = 0; y < field.getHeight(); y++)
 			for (int x = 0; x < field.getWidth(); x++){
@@ -31,6 +32,7 @@ public class MineFieldPane extends JPanel{
 				add(cell);
 				cells.put(info.getCoordinate(),cell);
 			}
+	
 	}
 
 	public void update(List<Coordinate> coordinates) {

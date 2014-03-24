@@ -8,8 +8,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import bbc.juniperus.games.minesweeper.core.MineField;
-import bbc.juniperus.games.minesweeper.gui.resources.ResourceLoadingException;
-import bbc.juniperus.games.minesweeper.gui.resources.ResourceManager;
 
 public class Main {
 
@@ -35,7 +33,7 @@ public class Main {
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//window.setSize(WIDTH, HEIGHT);
 		
-		MineField mineField = new MineField(16,50);
+		MineField mineField = new MineField(15,15);
 		GameView gamePane = new GameView();
 		Controller controller = new Controller(mineField, gamePane);
 		

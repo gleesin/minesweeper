@@ -17,7 +17,8 @@ import javax.swing.border.Border;
 
 import bbc.juniperus.games.minesweeper.core.CellInfo;
 import bbc.juniperus.games.minesweeper.core.Coordinate;
-import bbc.juniperus.games.minesweeper.gui.resources.ResourceManager;
+import bbc.juniperus.games.minesweeper.gui.swing.ResourceManager.ImageResource;
+import bbc.juniperus.games.minesweeper.gui.swing.ResourceManager.ImageSetResource;
 
 @SuppressWarnings("serial")
 public class CellGui extends JPanel {
@@ -32,11 +33,11 @@ public class CellGui extends JPanel {
 	
 	private static final Border border = new CellBorder(BORDER_WIDTH, GameView.LIGHT_COLOR, colorBorder);
 	private static final Border borderRevealed = BorderFactory.createMatteBorder(1, 1, 0, 0, colorBorder);
-	private static final Icon[] numberIcons = ResourceManager.getInstance().createMineFieldNumberIcons(10);
-	private static final Icon mineIcon = ResourceManager.getInstance().createMineIcon(13);
-	private static final Icon crossedMineIcon = ResourceManager.getInstance().createCrossedMineIcon(13);
-	private static final Icon questionMarkIcon = ResourceManager.getInstance().createQuestionMarkIcon(6);
-	private static final Icon flagIcon = ResourceManager.getInstance().createFlagIcon(8);
+	private static final Icon[] numberIcons = ResourceManager.getInstance().createIconSet(ImageSetResource.MINEFIELD_NUMBERS, 10);
+	private static final Icon mineIcon = ResourceManager.getInstance().createIcon(ImageResource.MINE, 13);
+	private static final Icon crossedMineIcon = ResourceManager.getInstance().createIcon(ImageResource.CROSSED_MINE, 13);
+	private static final Icon questionMarkIcon = ResourceManager.getInstance().createIcon(ImageResource.QUESTION_MARK, 6);
+	private static final Icon flagIcon = ResourceManager.getInstance().createIcon(ImageResource.FLAG, 8);
 
 	private static final Border labelPressedBorder = BorderFactory.createEmptyBorder(1, 1, 0, 0);
 	
@@ -155,6 +156,7 @@ public class CellGui extends JPanel {
 			if (count > 0)
 				icon = numberIcons[count-1];
 		}
+		
 		label.setIcon(icon);
 	}
 	

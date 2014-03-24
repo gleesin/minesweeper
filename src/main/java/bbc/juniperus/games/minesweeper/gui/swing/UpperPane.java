@@ -1,5 +1,6 @@
 package bbc.juniperus.games.minesweeper.gui.swing;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 
@@ -16,14 +17,34 @@ public class UpperPane extends JPanel{
 	private static final Border OUTSIDE_BORDER = BorderFactory.createMatteBorder(0, 0, 6, 0, GameView.MAIN_COLOR);
 	private static final Border BORDER = BorderFactory.createCompoundBorder(OUTSIDE_BORDER, INSIDE_BORDER);
 	
-	FaceButton button;
-	
+	private FaceButton button;
+	private Display flagDisplay, timeDisplay;
 	
 	public UpperPane(){
+		super(new BorderLayout());
 		setBackground(GameView.MAIN_COLOR);
 		setBorder(BORDER);
+		
+		flagDisplay = new Display();
+		timeDisplay = new Display();
+		
+		JPanel leftPane = new JPanel();
+		leftPane.setBackground(getBackground());
+		leftPane.add(flagDisplay);
+		
+		
+		JPanel rightPane = new JPanel();
+		rightPane.setBackground(getBackground());
+		rightPane.add(timeDisplay);
+		
+		JPanel middlePane = new JPanel();
+		middlePane.setBackground(getBackground());
 		button = new FaceButton();
-		add(button);
+		middlePane.add(button);
+		
+		add(middlePane);
+		add(leftPane, BorderLayout.WEST);
+		add(rightPane, BorderLayout.EAST);
 	}
 	
 	

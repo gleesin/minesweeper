@@ -6,14 +6,14 @@ import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import bbc.juniperus.games.minesweeper.gui.resources.ResourceManager;
+import bbc.juniperus.games.minesweeper.gui.swing.ResourceManager.ImageSetResource;
 
 @SuppressWarnings("serial")
 public class Display extends JPanel{
 
 	private static final int DIGIT_COUNT = 3;
 	private JLabel[] labels = new JLabel[DIGIT_COUNT];
-	private Icon[] numbers = ResourceManager.getInstance().createDisplayNumberIcons(20);
+	private Icon[] numbers = ResourceManager.getInstance().createIconSet(ImageSetResource.DISPLAY_NUMBERS,13);
 	
 	
 	public Display(){
