@@ -18,6 +18,8 @@ public class GameController implements CellGuiListener{
 	private MineField field; 
 	private GameView gamePane;
 	private boolean timerOn;
+	private int secondsPassed;
+	private Timer timer;
 
 	public GameController(MineField field, GameView gamePane){
 		this.field = field;
@@ -32,11 +34,19 @@ public class GameController implements CellGuiListener{
 			}
 			
 		});
+		
+		gamePane.setFlagDisplayNumber(field.getLeftFlagsCount());
+	}
+	
+	
+	private void newGame(){
+		secondsPassed = 0;
 	}
 	
 	private void gameOver(){
 		//JOptionPane.showConfirmDialog(null, "Game over piiico");
 		gamePane.gameOver(false);
+		stopTimer();
 	}
 
 
@@ -67,15 +77,25 @@ public class GameController implements CellGuiListener{
 	
 	private void startTimer(){
 		 int delay = 1000; 
-		  ActionListener taskPerformer = new ActionListener() {
-			  
-			  int secondsPassed;
+		 
+		 final Thread t = Thread.currentThread();
+		 
+		 secondsPassed++;
+		 
+		 ActionListener taskPerformer = new ActionListener() {
 			  
 		      public void actionPerformed(ActionEvent evt) {
 		         gamePane.setTimeDisplayNumber(++secondsPassed);
 		      }
 		  };
-		  new Timer(delay, taskPerformer).start();
+		  timer  = new Timer(delay, taskPerformer);
+		  timer.start();
+		  gamePane.setTimeDisplayNumber(secondsPassed);
+	}
+	
+	private void stopTimer(){
+		if (timer != null)
+			timer.stop();
 	}
 
 	@Override
@@ -91,6 +111,9 @@ public class GameController implements CellGuiListener{
 			field.setQuestionMark(coordinate, false);
 		}else{ //info.hasFlag() == false && info.hasQuestionMark() == false
 			assert !(info.hasQuestionMark() || info.hasFlag());
+			
+			if (field.getLeftFlagsCount()  == 0) //Ignore if we cannot set more flags.
+				return;
 			setFlag(coordinate);
 		}
 		
@@ -113,6 +136,18 @@ public class GameController implements CellGuiListener{
 		
 		
 		
+	}
+
+
+	@Override
+	public void leftMouseButtonPressed(Coordinate coordinate) {
+		gamePane.setFace(Face.SUSPENDED);
+	}
+
+
+	@Override
+	public void leftMouseButtonReleased(Coordinate coordinate) {
+		gamePane.setFace(Face.NORMAL);
 	}
 	
 }

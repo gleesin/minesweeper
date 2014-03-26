@@ -87,10 +87,11 @@ public class CellGui extends JPanel {
 						cellInfo.hasFlag() ||
 						ignoreMouseEvents) //Ignore if the underlying cell has flag
 					return;
-				
+				buttonPressed();
 				setBorder(borderRevealed);
 				label.setBorder(labelPressedBorder);
 				repaint();
+				
 			}
 
 			@Override
@@ -98,6 +99,7 @@ public class CellGui extends JPanel {
 				if (isRevealed || ignoreMouseEvents) 
 					return;
 				
+				buttonReleased();
 				label.setBorder(null);
 				
 				int x = e.getX();
@@ -170,6 +172,15 @@ public class CellGui extends JPanel {
 	
 
 	
+	private void buttonPressed(){
+		for (CellGuiListener listener : listeners)
+			listener.leftMouseButtonPressed(cellInfo.getCoordinate());
+	}
+	
+	private void buttonReleased(){
+		for (CellGuiListener listener : listeners)
+			listener.leftMouseButtonReleased(cellInfo.getCoordinate());
+	}
 	
 	private void clicked(int button){
 		

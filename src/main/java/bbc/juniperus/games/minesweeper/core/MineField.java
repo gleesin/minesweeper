@@ -14,7 +14,7 @@ public class MineField {
 		
 	private int columnsCount;
 	private int rowsCount;
-	private int minesNo;
+	private int minesCount;
 	private int cellsCount;
 	private float minesPortion = 0.15f;
 	private Map<Coordinate,Cell> cells;
@@ -22,15 +22,16 @@ public class MineField {
 	private boolean mineHit;
 	private List<Coordinate> newlyRevealedCells = new ArrayList<Coordinate>();
 	private GameInfo gameInfo;
-	private int flagCount;
+	private int flagsLeft;
 	
 	public MineField(int colsNo, int rowsNo){
 		this.columnsCount =colsNo;
 		this.rowsCount = rowsNo;
 		cellsCount = colsNo * rowsNo;
 		cells = new HashMap<Coordinate,Cell>(cellsCount);
-		minesNo = (int) (cellsCount * minesPortion);
-
+		minesCount = (int) (cellsCount * minesPortion);
+		flagsLeft = minesCount;
+		
 		Set<Integer> mineIndexes = getMineIndexes();
 		
 		//Create mine field cells.
@@ -73,6 +74,11 @@ public class MineField {
 		return mineHit;
 	}
 	
+	public int getLeftFlagsCount(){
+		return flagsLeft;
+	}
+	
+	
 	public List<Coordinate> revealCell(Coordinate coordinate){
 	
 		if (coordinate.x < 0 || coordinate.x >= columnsCount)
@@ -107,18 +113,18 @@ public class MineField {
 	public int setFlag(Coordinate coordinate, boolean isFlagged){
 		
 		if (isFlagged){
-			if (flagCount >= minesNo)
-				throw new IllegalStateException("Number of flag cannot be higher than number of mines");
-			flagCount++;
+			if (flagsLeft == 0)
+				throw new IllegalStateException("There cannot be more flags then mines");
+			flagsLeft--;
 		}else{
-			if (flagCount == 0)
-				throw new IllegalStateException("There are no flags on minefield");
-			flagCount--;
+			if (flagsLeft == minesCount)
+				throw new IllegalStateException("Cannot remove flag. There should be no flag in the field.");
+			flagsLeft++;
 		}
 		
 		cells.get(coordinate).setHasFlag(isFlagged);
 		
-		return flagCount;
+		return flagsLeft;
 	}
 	
 	public void setQuestionMark(Coordinate coordinate, boolean hasQuestionmark){
@@ -132,9 +138,9 @@ public class MineField {
 	
 	
 	private Set<Integer> getMineIndexes(){
-		Set<Integer> mineCells = new HashSet<Integer>(minesNo);
+		Set<Integer> mineCells = new HashSet<Integer>(minesCount);
 		Random random = new Random();
-		for (int i = 0; i < minesNo;i++){
+		for (int i = 0; i < minesCount;i++){
 			int index = random.nextInt(cellsCount);
 			//If the number has been already picked add
 			//one more iteration.
@@ -205,7 +211,9 @@ public class MineField {
 	 */
 	private void uncoverCell(Cell cell){
 		
-		if (cell.isRevealed()) //Ignore if it has been already uncovered (also prevents stackoverflow cycle).
+		//Ignore if it has been already uncovered (also prevents stackoverflow cycle) or
+		//if has flag.
+		if (cell.isRevealed() || cell.hasFlag()) 
 			return;
 		
 		cell.reveal();
