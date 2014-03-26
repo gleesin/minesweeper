@@ -53,8 +53,17 @@ public class UpperPane extends JPanel{
 		return new Dimension(0, HEIGHT);
 	}
 
-
-	public void addFaceButtonListener(ActionListener listener) {
-		button.addActionListener(listener);
+	
+	public FaceButton getFaceButton(){
+		return button;
 	}
+	
+	public Display getFlagDisplay(){
+		return flagDisplay;
+	}
+	
+	public Display getTimeDisplay(){
+		return timeDisplay;
+	}
+
 }

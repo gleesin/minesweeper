@@ -35,7 +35,7 @@ public class Main {
 		
 		MineField mineField = new MineField(15,15);
 		GameView gamePane = new GameView();
-		Controller controller = new Controller(mineField, gamePane);
+		GameController controller = new GameController(mineField, gamePane);
 		
 		window.add(gamePane);
 		window.pack();

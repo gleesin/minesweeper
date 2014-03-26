@@ -17,6 +17,7 @@ import javax.swing.border.Border;
 
 import bbc.juniperus.games.minesweeper.core.CellInfo;
 import bbc.juniperus.games.minesweeper.core.Coordinate;
+import bbc.juniperus.games.minesweeper.core.GameInfo;
 import bbc.juniperus.games.minesweeper.gui.swing.ResourceManager.ImageResource;
 import bbc.juniperus.games.minesweeper.gui.swing.ResourceManager.ImageSetResource;
 
@@ -45,12 +46,14 @@ public class CellGui extends JPanel {
 	private JLabel label;
 	private CellInfo cellInfo;
 	private Set<CellGuiListener> listeners = new HashSet<CellGuiListener>();
+	private boolean ignoreMouseEvents;
 	
-	public CellGui(CellInfo  info){
+	public CellGui(final CellInfo  cellInfo){
 		super(new BorderLayout());
 		setBackground(colorBackground);
 		setSize(WIDTH, HEIGHT);
-		cellInfo = info;
+		this.cellInfo = cellInfo;
+		
 		label = new JLabel();
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 		label.setVerticalAlignment(SwingConstants.CENTER);
@@ -81,7 +84,8 @@ public class CellGui extends JPanel {
 				
 				if (isRevealed ||  //Ignore if this field is already revealed.
 						e.getButton() != MouseEvent.BUTTON1 || //Ignore if this is not the left click.
-						cellInfo.hasFlag() ) //Ignore if the underlying cell has flag
+						cellInfo.hasFlag() ||
+						ignoreMouseEvents) //Ignore if the underlying cell has flag
 					return;
 				
 				setBorder(borderRevealed);
@@ -91,7 +95,7 @@ public class CellGui extends JPanel {
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				if (isRevealed) 
+				if (isRevealed || ignoreMouseEvents) 
 					return;
 				
 				label.setBorder(null);
@@ -119,6 +123,10 @@ public class CellGui extends JPanel {
 		listeners.add(listener);
 	}
 	
+	
+	public void setIgnoreMouseEvents(boolean b){
+		ignoreMouseEvents = b;
+	}
 	
 	public void update(){
 		if (cellInfo.isRevealed()){

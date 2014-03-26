@@ -10,7 +10,9 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 import bbc.juniperus.games.minesweeper.core.Coordinate;
+import bbc.juniperus.games.minesweeper.core.GameInfo;
 import bbc.juniperus.games.minesweeper.core.MineField;
+import bbc.juniperus.games.minesweeper.gui.swing.FaceButton.Face;
 
 @SuppressWarnings("serial")
 public class GameView extends JPanel{
@@ -41,8 +43,8 @@ public class GameView extends JPanel{
 		add(upperPane, BorderLayout.NORTH);
 	}
 	
-	public void initialize(MineField mineField, Controller controller){
-		mineFieldPane.fillWithCells(mineField, controller);
+	public void initialize(GameInfo info, GameController controller){
+		mineFieldPane.fillWithCells(info, controller);
 	}
 	
 	public void updateMineField(List<Coordinate> coordinates){
@@ -53,8 +55,25 @@ public class GameView extends JPanel{
 		mineFieldPane.update(coordinate);
 	}
 	
-	public void addFaceButtonListener(ActionListener listener){
-		upperPane.addFaceButtonListener(listener);
+	public void setFlagDisplayNumber(int number){
+		upperPane.getFlagDisplay().setNumber(number);
 	}
 	
+	public void setTimeDisplayNumber(int number){
+		upperPane.getTimeDisplay().setNumber(number);
+	}
+	
+	public void setFace(Face face){
+		upperPane.getFaceButton().setFace(face);
+	}
+	
+	public void addFaceButtonListener(ActionListener listener){
+		upperPane.getFaceButton().addActionListener(listener);
+	}
+	
+	public void gameOver(boolean won){
+		Face face = won? Face.VICTORIOUS : Face.DEAD;
+		upperPane.getFaceButton().setFace(face);
+		mineFieldPane.gameOver(won);
+	}
 }

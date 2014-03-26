@@ -13,6 +13,7 @@ class Cell {
 	//Testing & debugging purposes.
 	public final int debugId;
 	private static int count;
+	private CellInfo info;
 	
 	Cell(int x, int y){
 		coordinate = new Coordinate(x,y);
@@ -81,44 +82,48 @@ class Cell {
 	
 	
 	CellInfo getCellInfo(){
-		return new CellInfo(){
-
-			@Override
-			public Coordinate getCoordinate() {
-				return Cell.this.getCoordinate();
-			}
-
-			@Override
-			public boolean isRevealed() {
-				return Cell.this.isRevealed();
-			}
-
-			@Override
-			public boolean hasMine() {
-				return Cell.this.hasMine();
-			}
-
-			@Override
-			public boolean hasFlag() {
-				return Cell.this.hasFlag();
-			}
-
-			@Override
-			public int getsetNearbyMinesCount() {
-				return Cell.this.getNearbyMinesCount();
-			}
-			
-			@Override
-			public boolean wasMineHit() {
-				return wasMineHit;
-			}
-			
-			@Override
-			public boolean hasQuestionMark() {
-				return questionMark;
-			}
-			
+		
+		if (info == null)
+			info = new CellInfo(){
+	
+				@Override
+				public Coordinate getCoordinate() {
+					return Cell.this.getCoordinate();
+				}
+	
+				@Override
+				public boolean isRevealed() {
+					return Cell.this.isRevealed();
+				}
+	
+				@Override
+				public boolean hasMine() {
+					return Cell.this.hasMine();
+				}
+	
+				@Override
+				public boolean hasFlag() {
+					return Cell.this.hasFlag();
+				}
+	
+				@Override
+				public int getsetNearbyMinesCount() {
+					return Cell.this.getNearbyMinesCount();
+				}
+				
+				@Override
+				public boolean wasMineHit() {
+					return wasMineHit;
+				}
+				
+				@Override
+				public boolean hasQuestionMark() {
+					return questionMark;
+				}
+				
 		};
+		
+		return info;
 	}
 	
 	

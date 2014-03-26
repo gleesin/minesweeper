@@ -1,5 +1,6 @@
 package bbc.juniperus.games.minesweeper.core;
 
+import java.nio.channels.IllegalSelectorException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -20,6 +21,8 @@ public class MineField {
 	private List<Cell> mines = new ArrayList<Cell>();
 	private boolean mineHit;
 	private List<Coordinate> newlyRevealedCells = new ArrayList<Coordinate>();
+	private GameInfo gameInfo;
+	private int flagCount;
 	
 	public MineField(int colsNo, int rowsNo){
 		this.columnsCount =colsNo;
@@ -101,8 +104,21 @@ public class MineField {
 	}
 	
 	
-	public void setFlag(Coordinate coordinate, boolean isFlagged){
+	public int setFlag(Coordinate coordinate, boolean isFlagged){
+		
+		if (isFlagged){
+			if (flagCount >= minesNo)
+				throw new IllegalStateException("Number of flag cannot be higher than number of mines");
+			flagCount++;
+		}else{
+			if (flagCount == 0)
+				throw new IllegalStateException("There are no flags on minefield");
+			flagCount--;
+		}
+		
 		cells.get(coordinate).setHasFlag(isFlagged);
+		
+		return flagCount;
 	}
 	
 	public void setQuestionMark(Coordinate coordinate, boolean hasQuestionmark){
@@ -218,6 +234,35 @@ public class MineField {
 										homeCoor.y +  offsetY);
 		return cells.get(neighbourCoor);
 	}
+	
+	public GameInfo getGameInfo(){
+		if (gameInfo == null)
+			gameInfo = new GameInfo(){
+
+				@Override
+				public boolean isGameOver() {
+					return MineField.this.isGameOver();
+				}
+
+				@Override
+				public int getRowCount() {
+					return getHeight();
+				}
+
+				@Override
+				public int getColumnCount() {
+					return getWidth();
+				}
+
+				@Override
+				public CellInfo getCellInfo(int x, int y) {
+					return MineField.this.getCellInfo(x, y);
+				}
+		};
+
+				return gameInfo;
+	}
+	
 	
 	/*
 	public static void main(String[] args) throws IOException{
