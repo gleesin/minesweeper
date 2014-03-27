@@ -2,6 +2,7 @@ package bbc.juniperus.games.minesweeper.gui.swing;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -21,26 +22,29 @@ public class GameController implements CellGuiListener{
 	private int secondsPassed;
 	private Timer timer;
 
-	public GameController(MineField field, GameView gamePane){
-		this.field = field;
+	public GameController(GameView gamePane){
+		this.field = new MineField(15,15);
 		this.gamePane = gamePane;
-		gamePane.initialize(field.getGameInfo(), this);
+		gamePane.newGame(field.getGameInfo(), this);
 		
 		gamePane.addFaceButtonListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Button was pressed");
+				newGame();
 			}
 			
 		});
-		
-		gamePane.setFlagDisplayNumber(field.getLeftFlagsCount());
 	}
 	
 	
 	private void newGame(){
 		secondsPassed = 0;
+		timerOn = false;
+		field = new MineField(field.getWidth(), field.getHeight());
+		gamePane.newGame(field.getGameInfo(), this);
+		gamePane.setFlagDisplayNumber(field.getLeftFlagsCount());
+		gamePane.setTimeDisplayNumber(0);
 	}
 	
 	private void gameOver(){
@@ -82,14 +86,14 @@ public class GameController implements CellGuiListener{
 		 
 		 secondsPassed++;
 		 
-		 ActionListener taskPerformer = new ActionListener() {
-			  
-		      public void actionPerformed(ActionEvent evt) {
-		         gamePane.setTimeDisplayNumber(++secondsPassed);
-		      }
-		  };
-		  timer  = new Timer(delay, taskPerformer);
-		  timer.start();
+ ActionListener taskPerformer = new ActionListener() {
+	  
+      public void actionPerformed(ActionEvent evt) {
+         gamePane.setTimeDisplayNumber(++secondsPassed);
+      }
+  };
+  timer  = new Timer(delay, taskPerformer);
+  timer.start();
 		  gamePane.setTimeDisplayNumber(secondsPassed);
 	}
 	
@@ -100,24 +104,7 @@ public class GameController implements CellGuiListener{
 
 	@Override
 	public void rightMouseButtonClicked(Coordinate coordinate){
-		CellInfo info = field.getCellInfo(coordinate.x, coordinate.y);
-		
-		if (info.hasFlag()){ //If has flag, remove flag and add question mark.
-			assert !info.hasQuestionMark();
-			removeFlag(coordinate);
-			field.setQuestionMark(coordinate, true);
-		}else if (info.hasQuestionMark()){ //Has question mark, remove question mark (flag shout not be there!).
-			assert !info.hasFlag();
-			field.setQuestionMark(coordinate, false);
-		}else{ //info.hasFlag() == false && info.hasQuestionMark() == false
-			assert !(info.hasQuestionMark() || info.hasFlag());
-			
-			if (field.getLeftFlagsCount()  == 0) //Ignore if we cannot set more flags.
-				return;
-			setFlag(coordinate);
-		}
-		
-		gamePane.updateMineField(coordinate);
+
 		
 	}
 
@@ -134,14 +121,34 @@ public class GameController implements CellGuiListener{
 	@Override
 	public void middleMouseButtonClicked(Coordinate coordinate) {
 		
-		
-		
 	}
 
 
 	@Override
-	public void leftMouseButtonPressed(Coordinate coordinate) {
-		gamePane.setFace(Face.SUSPENDED);
+	public void mouseButtonPressed(Coordinate coordinate, int mouseButton) {
+		if (mouseButton == MouseEvent.BUTTON1)
+			gamePane.setFace(Face.SUSPENDED);
+		else if (mouseButton == MouseEvent.BUTTON3){
+			CellInfo info = field.getCellInfo(coordinate.x, coordinate.y);
+			
+			if (info.hasFlag()){ //If has flag, remove flag and add question mark.
+				assert !info.hasQuestionMark();
+				removeFlag(coordinate);
+				field.setQuestionMark(coordinate, true);
+			}else if (info.hasQuestionMark()){ //Has question mark, remove question mark (flag shout not be there!).
+				assert !info.hasFlag();
+				field.setQuestionMark(coordinate, false);
+			}else{ //info.hasFlag() == false && info.hasQuestionMark() == false
+				assert !(info.hasQuestionMark() || info.hasFlag());
+				
+				if (field.getLeftFlagsCount()  == 0) //Ignore if we cannot set more flags.
+					return;
+				setFlag(coordinate);
+			}
+			
+			gamePane.updateMineField(coordinate);
+		}
+		
 	}
 
 

@@ -1,18 +1,15 @@
 package bbc.juniperus.games.minesweeper.gui.swing;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-
-import bbc.juniperus.games.minesweeper.core.MineField;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 
 public class Main {
 
 	private static int WIDTH = 400;
 	private static int HEIGHT = 500;
+	private JMenuBar menuBar;
+	
 	
 	private JFrame window;
 	
@@ -29,13 +26,21 @@ public class Main {
 	
 	
 	private void createGui(){
+		
+		menuBar = new JMenuBar();
+		
+		JMenu menu = new JMenu("Game");
+		JMenu menu2 = new JMenu("Help");
+		
+		menuBar.add(menu);
+		menuBar.add(menu2);
 		window = new JFrame();
+		window.setJMenuBar(menuBar);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//window.setSize(WIDTH, HEIGHT);
 		
-		MineField mineField = new MineField(15,15);
 		GameView gamePane = new GameView();
-		GameController controller = new GameController(mineField, gamePane);
+		GameController controller = new GameController(gamePane);
 		
 		window.add(gamePane);
 		window.pack();

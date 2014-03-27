@@ -11,7 +11,6 @@ import javax.swing.border.Border;
 
 import bbc.juniperus.games.minesweeper.core.Coordinate;
 import bbc.juniperus.games.minesweeper.core.GameInfo;
-import bbc.juniperus.games.minesweeper.core.MineField;
 import bbc.juniperus.games.minesweeper.gui.swing.FaceButton.Face;
 
 @SuppressWarnings("serial")
@@ -43,8 +42,11 @@ public class GameView extends JPanel{
 		add(upperPane, BorderLayout.NORTH);
 	}
 	
-	public void initialize(GameInfo info, GameController controller){
-		mineFieldPane.fillWithCells(info, controller);
+	public void newGame(GameInfo gameInfo, GameController controller){
+		mineFieldPane.removeAll();
+		mineFieldPane.fillWithCells(gameInfo, controller);
+		upperPane.getFaceButton().reset();
+		repaint();
 	}
 	
 	public void updateMineField(List<Coordinate> coordinates){

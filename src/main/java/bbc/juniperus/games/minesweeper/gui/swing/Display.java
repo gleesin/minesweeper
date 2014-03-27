@@ -29,7 +29,8 @@ public class Display extends JPanel{
 	}
 	
 	public void setNumber(int number){
-		int max = 10 ^ DIGIT_COUNT -1;
+		
+		int max  = (int)Math.pow(10, DIGIT_COUNT)-1;
 		if (number < 0 && number > max)
 			throw new IllegalArgumentException("The number needs to be in range <0, " + max + ">");
 		

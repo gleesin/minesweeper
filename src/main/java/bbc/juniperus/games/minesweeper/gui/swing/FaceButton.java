@@ -59,6 +59,11 @@ public class FaceButton extends JButton{
 		setFace(Face.NORMAL);
 	}
 	
+	public void reset(){
+		setFace(Face.NORMAL);
+		previousFace = Face.NORMAL;
+	}
+	
 	public void setFace(Face face){
 		setIcon(faceIcons[face.ordinal()]);
 		this.face = face;

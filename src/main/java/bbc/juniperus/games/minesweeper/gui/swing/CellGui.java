@@ -13,6 +13,7 @@ import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
 import bbc.juniperus.games.minesweeper.core.CellInfo;
@@ -47,6 +48,7 @@ public class CellGui extends JPanel {
 	private CellInfo cellInfo;
 	private Set<CellGuiListener> listeners = new HashSet<CellGuiListener>();
 	private boolean ignoreMouseEvents;
+	private static boolean isLeftButtonPressed;
 	
 	public CellGui(final CellInfo  cellInfo){
 		super(new BorderLayout());
@@ -62,16 +64,30 @@ public class CellGui extends JPanel {
 		
 		addMouseListener(new MouseAdapter(){
 
-			/*
-			int pressedButton;
 			
 			@Override 
 			public void mouseEntered(MouseEvent e){
+				if (isRevealed || cellInfo.hasFlag() || cellInfo.hasQuestionMark())
+					return;
 				
-				if (e.getButton() == MouseEvent.BUTTON2)
-				System.out.println("Mouse entered");
+				if (SwingUtilities.isLeftMouseButton(e)){
+					setPressedLook();
+					System.out.println("shshs");
+				}
+				
 			}
-			*/
+			
+			@Override 
+			public void mouseExited(MouseEvent e){
+				if (isRevealed || cellInfo.hasFlag() || cellInfo.hasQuestionMark())
+					return;
+				
+				if (SwingUtilities.isLeftMouseButton(e)){
+					setDefaultLook();
+				}
+			}
+			
+			
 			
 			
 			/**
@@ -82,23 +98,32 @@ public class CellGui extends JPanel {
 			public void mousePressed(MouseEvent e) {
 				//System.out.println("Mouse pressed" + e.getButton());
 				
-				if (isRevealed ||  //Ignore if this field is already revealed.
-						e.getButton() != MouseEvent.BUTTON1 || //Ignore if this is not the left click.
-						cellInfo.hasFlag() ||
-						ignoreMouseEvents) //Ignore if the underlying cell has flag
+				if (isRevealed   //Ignore if this field is already revealed.
+						|| e.getButton() == MouseEvent.BUTTON2//Ignore if this is middle click
+						|| ignoreMouseEvents) 
 					return;
-				buttonPressed();
-				setBorder(borderRevealed);
-				label.setBorder(labelPressedBorder);
-				repaint();
 				
+				buttonPressed(e.getButton());
+				
+				
+				if ( e.getButton() == MouseEvent.BUTTON1){
+					isLeftButtonPressed = true;
+					setPressedLook();
+				}
+
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				if (isRevealed || ignoreMouseEvents) 
-					return;
 				
+				CellGui c = (CellGui) e.getSource();
+				
+				System.out.println(c.getCoordinate());
+				
+				System.out.println("Mouse released " + cellInfo.getCoordinate());
+				if (isRevealed || ignoreMouseEvents || e.getButton() != MouseEvent.BUTTON1) 
+					return;
+				isLeftButtonPressed = false;
 				buttonReleased();
 				label.setBorder(null);
 				
@@ -111,8 +136,7 @@ public class CellGui extends JPanel {
 					clicked(e.getButton());
 				else{
 					//Mouse was released with pointer being outside bounds of this component.
-					setBorder(border);
-					repaint(); // Paint back to normal.
+					setDefaultLook();
 				}
 				
 			}
@@ -120,6 +144,19 @@ public class CellGui extends JPanel {
 		});
 	}
 	
+	
+	private void setPressedLook(){
+		isLeftButtonPressed = true;
+		//Change graphics
+		setBorder(borderRevealed);
+		label.setBorder(labelPressedBorder);
+		repaint();
+	}
+	
+	private void setDefaultLook(){
+		setBorder(border);
+		repaint(); // Paint back to normal.
+	}
 	
 	public void addListener(CellGuiListener listener){
 		listeners.add(listener);
@@ -172,9 +209,9 @@ public class CellGui extends JPanel {
 	
 
 	
-	private void buttonPressed(){
+	private void buttonPressed(int mouseButton){
 		for (CellGuiListener listener : listeners)
-			listener.leftMouseButtonPressed(cellInfo.getCoordinate());
+			listener.mouseButtonPressed(cellInfo.getCoordinate(), mouseButton);
 	}
 	
 	private void buttonReleased(){
