@@ -54,8 +54,43 @@ public class GameController implements CellGuiListener{
 	}
 
 
+
+
+	
+	private void startTimer(){
+		secondsPassed++;
+			 
+		ActionListener taskPerformer = new ActionListener() {
+
+			public void actionPerformed(ActionEvent evt) {
+				gamePane.setTimeDisplayNumber(++secondsPassed);
+			}
+		};
+		timer = new Timer(1000, taskPerformer);
+		timer.start();
+		gamePane.setTimeDisplayNumber(secondsPassed);
+	}
+	
+	private void stopTimer(){
+		if (timer != null)
+			timer.stop();
+	}
+
+
+
+	private void setFlag(Coordinate coordinate){
+		int flagCount = field.setFlag(coordinate, true);
+		gamePane.setFlagDisplayNumber(flagCount);
+	}
+	
+	private void removeFlag(Coordinate coordinate){
+		int flagCount = field.setFlag(coordinate, false);
+		gamePane.setFlagDisplayNumber(flagCount);
+	}
+
+
 	@Override
-	public void leftMouseButtonClicked(Coordinate coordinate) {
+	public void leftButtonActivated(Coordinate coordinate) {
 		
 		if (field.getCellInfo(coordinate.x, coordinate.y).hasFlag()) //Ignore if the cell has flag.
 			return;
@@ -67,68 +102,16 @@ public class GameController implements CellGuiListener{
 			return;
 		}
 		
-		System.out.println(field.debugImg());
+		//System.out.println(field.debugImg());
 		
 		if (!timerOn){
 			startTimer();
 			timerOn = true;
 		}
-		
-		
-		
-	}
-
-	
-	private void startTimer(){
-		 int delay = 1000; 
-		 
-		 final Thread t = Thread.currentThread();
-		 
-		 secondsPassed++;
-		 
- ActionListener taskPerformer = new ActionListener() {
-	  
-      public void actionPerformed(ActionEvent evt) {
-         gamePane.setTimeDisplayNumber(++secondsPassed);
-      }
-  };
-  timer  = new Timer(delay, taskPerformer);
-  timer.start();
-		  gamePane.setTimeDisplayNumber(secondsPassed);
-	}
-	
-	private void stopTimer(){
-		if (timer != null)
-			timer.stop();
-	}
-
-	@Override
-	public void rightMouseButtonClicked(Coordinate coordinate){
-
-		
-	}
-
-	private void setFlag(Coordinate coordinate){
-		int flagCount = field.setFlag(coordinate, true);
-		gamePane.setFlagDisplayNumber(flagCount);
-	}
-	
-	private void removeFlag(Coordinate coordinate){
-		int flagCount = field.setFlag(coordinate, false);
-		gamePane.setFlagDisplayNumber(flagCount);
 	}
 	
 	@Override
-	public void middleMouseButtonClicked(Coordinate coordinate) {
-		
-	}
-
-
-	@Override
-	public void mouseButtonPressed(Coordinate coordinate, int mouseButton) {
-		if (mouseButton == MouseEvent.BUTTON1)
-			gamePane.setFace(Face.SUSPENDED);
-		else if (mouseButton == MouseEvent.BUTTON3){
+	public void rightButtonActivated(Coordinate coordinate) {
 			CellInfo info = field.getCellInfo(coordinate.x, coordinate.y);
 			
 			if (info.hasFlag()){ //If has flag, remove flag and add question mark.
@@ -147,14 +130,5 @@ public class GameController implements CellGuiListener{
 			}
 			
 			gamePane.updateMineField(coordinate);
-		}
-		
 	}
-
-
-	@Override
-	public void leftMouseButtonReleased(Coordinate coordinate) {
-		gamePane.setFace(Face.NORMAL);
-	}
-	
 }
