@@ -3,11 +3,8 @@ package bbc.juniperus.games.minesweeper.gui.swing;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
@@ -15,12 +12,10 @@ import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
 import bbc.juniperus.games.minesweeper.core.CellInfo;
 import bbc.juniperus.games.minesweeper.core.Coordinate;
-import bbc.juniperus.games.minesweeper.core.GameInfo;
 import bbc.juniperus.games.minesweeper.gui.swing.ResourceManager.ImageResource;
 import bbc.juniperus.games.minesweeper.gui.swing.ResourceManager.ImageSetResource;
 
@@ -50,8 +45,7 @@ public class CellGui extends JPanel {
 	private boolean isRevealed;
 	private JLabel label;
 	private CellInfo cellInfo;
-	private Set<CellGuiListener> listeners = new HashSet<CellGuiListener>();
-	private boolean ignoreMouseEvents;
+	private Set<CellGuiObserver> listeners = new HashSet<CellGuiObserver>();
 	private boolean isPressed;
 	
 	public CellGui(final CellInfo  cellInfo){
@@ -70,15 +64,15 @@ public class CellGui extends JPanel {
 	
 
 	void mousePressed(int button){
-		if (isRevealed   //Ignore if this field is already revealed.
-				|| ignoreMouseEvents) 
+		if (isRevealed) 
 			return;
 		
 		if (button == MouseEvent.BUTTON3)
 			fireButtonActivated(ButtonAction.RIGHT); //Activate flag/question mark right after right  button was pressed.
 		else{
-			if (!cellInfo.hasFlag())
+			if (!cellInfo.hasFlag()){
 				setPressed(); //Just show pressed look. Revealing the cell is activated upon the release of the left mouse button.
+			}
 		}
 	}
 	
@@ -87,7 +81,7 @@ public class CellGui extends JPanel {
 	 * was over this component (and it was pressed).
 	 */
 	void mouseReleased(){
-		if (isRevealed || ignoreMouseEvents || cellInfo.hasFlag())
+		if (isRevealed || cellInfo.hasFlag())
 			return;
 		assert isPressed;
 		
@@ -117,14 +111,11 @@ public class CellGui extends JPanel {
 		repaint(); // Paint back to normal.
 	}
 	
-	public void addListener(CellGuiListener listener){
+	public void addListener(CellGuiObserver listener){
 		listeners.add(listener);
 	}
 	
-	
-	public void setIgnoreMouseEvents(boolean b){
-		ignoreMouseEvents = b;
-	}
+
 	
 	public void update(){
 		if (cellInfo.isRevealed()){
@@ -169,18 +160,15 @@ public class CellGui extends JPanel {
 	
 	private void fireButtonActivated(ButtonAction button){
 		if (button == ButtonAction.LEFT)
-			for (CellGuiListener listener : listeners)
+			for (CellGuiObserver listener : listeners)
 				listener.leftButtonActivated(cellInfo.getCoordinate());
 		else
-			for (CellGuiListener listener : listeners)
+			for (CellGuiObserver listener : listeners)
 				listener.rightButtonActivated(cellInfo.getCoordinate());
 	}
 	
 	@Override
 	public Dimension getPreferredSize(){
 		return dimension;
-	}
-	
-
-	
+	}	
 }

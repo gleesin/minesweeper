@@ -15,7 +15,6 @@ public class MineField {
 	private int rowsCount;
 	private int minesCount;
 	private int cellsCount;
-	private float minesPortion = 0.15f;
 	private Map<Coordinate,Cell> cells;
 	private List<Cell> mines = new ArrayList<Cell>();
 	private boolean mineHit;
@@ -23,12 +22,13 @@ public class MineField {
 	private GameInfo gameInfo;
 	private int flagsLeft;
 	
-	public MineField(int colsNo, int rowsNo){
+	public MineField(int colsNo, int rowsNo,float mineRatio){
 		this.columnsCount =colsNo;
 		this.rowsCount = rowsNo;
+		
 		cellsCount = colsNo * rowsNo;
 		cells = new HashMap<Coordinate,Cell>(cellsCount);
-		minesCount = (int) (cellsCount * minesPortion);
+		minesCount = (int) (cellsCount * mineRatio);
 		flagsLeft = minesCount;
 		
 		Set<Integer> mineIndexes = getMineIndexes();

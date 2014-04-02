@@ -2,29 +2,29 @@ package bbc.juniperus.games.minesweeper.gui.swing;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 import java.util.List;
 
-import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 import bbc.juniperus.games.minesweeper.core.CellInfo;
 import bbc.juniperus.games.minesweeper.core.Coordinate;
-import bbc.juniperus.games.minesweeper.core.GameInfo;
 import bbc.juniperus.games.minesweeper.core.MineField;
 import bbc.juniperus.games.minesweeper.gui.swing.FaceButton.Face;
 
-public class GameController implements CellGuiListener{
+public class GameController implements CellGuiObserver{
 
 	private MineField field; 
 	private GameView gamePane;
 	private boolean timerOn;
 	private int secondsPassed;
 	private Timer timer;
+	private GameOptions options;
 
-	public GameController(GameView gamePane){
-		this.field = new MineField(15,15);
+	public GameController(GameOptions options, GameView gamePane){
+		this.field = new MineField(options.getColumCount(),options.getColumCount(), options.getMinesRatio());
 		this.gamePane = gamePane;
+		this.options = options;
+		
 		gamePane.newGame(field.getGameInfo(), this);
 		
 		gamePane.addFaceButtonListener(new ActionListener(){
@@ -41,7 +41,7 @@ public class GameController implements CellGuiListener{
 	private void newGame(){
 		secondsPassed = 0;
 		timerOn = false;
-		field = new MineField(field.getWidth(), field.getHeight());
+		field = new MineField(options.getColumCount(),options.getColumCount(), options.getMinesRatio());
 		gamePane.newGame(field.getGameInfo(), this);
 		gamePane.setFlagDisplayNumber(field.getLeftFlagsCount());
 		gamePane.setTimeDisplayNumber(0);
@@ -58,7 +58,6 @@ public class GameController implements CellGuiListener{
 
 	
 	private void startTimer(){
-		secondsPassed++;
 			 
 		ActionListener taskPerformer = new ActionListener() {
 
@@ -68,7 +67,7 @@ public class GameController implements CellGuiListener{
 		};
 		timer = new Timer(1000, taskPerformer);
 		timer.start();
-		gamePane.setTimeDisplayNumber(secondsPassed);
+		gamePane.setTimeDisplayNumber(++secondsPassed);
 	}
 	
 	private void stopTimer(){
@@ -130,5 +129,15 @@ public class GameController implements CellGuiListener{
 			}
 			
 			gamePane.updateMineField(coordinate);
+	}
+
+
+	public void pressedStateStarted() {
+		gamePane.setFace(Face.SUSPENDED);
+		
+	}
+
+	public void pressedStateEnded() {
+		gamePane.setFace(Face.NORMAL);
 	}
 }

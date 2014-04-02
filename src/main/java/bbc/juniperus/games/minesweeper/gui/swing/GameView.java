@@ -44,7 +44,7 @@ public class GameView extends JPanel{
 	
 	public void newGame(GameInfo gameInfo, GameController controller){
 		mineFieldPane.removeAll();
-		mineFieldPane.fillWithCells(gameInfo, controller);
+		mineFieldPane.newGame(gameInfo, controller);
 		upperPane.getFaceButton().reset();
 		repaint();
 	}

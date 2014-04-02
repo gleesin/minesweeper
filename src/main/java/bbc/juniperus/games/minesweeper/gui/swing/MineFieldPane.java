@@ -4,7 +4,6 @@ import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +23,7 @@ public class MineFieldPane extends JPanel{
 	private Map<Coordinate,CellGui> cells = new HashMap<Coordinate,CellGui>();
 	private static final Border BORDER = new CellBorder(3,GameView.DARK_COLOR, GameView.LIGHT_COLOR); 
 	private GameController controller;
+	private boolean ignoreMouseEvent;
 	
 	
 	MineFieldPane(){
@@ -34,10 +34,11 @@ public class MineFieldPane extends JPanel{
 	}
 	
 	
-	public void fillWithCells(GameInfo gameInfo, GameController controller){
+	public void newGame(GameInfo gameInfo, GameController controller){
 		setLayout(new GridLayout(gameInfo.getRowCount(),gameInfo.getColumnCount()));
 		setBorder(BORDER);
 		this.controller = controller;
+		ignoreMouseEvent = false;
 		
 		
 		for (int y = 0; y < gameInfo.getRowCount(); y++)
@@ -66,9 +67,7 @@ public class MineFieldPane extends JPanel{
 	}
 	
 	public void gameOver(boolean won){
-		//Stop the cell field from processing mouse events.
-		for (CellGui c : cells.values())
-			c.setIgnoreMouseEvents(true);
+		ignoreMouseEvent = true;
 	}
 	
 	
@@ -81,7 +80,8 @@ public class MineFieldPane extends JPanel{
 		
 		@Override
 		public void mouseDragged(MouseEvent e) {
-			System.out.println(Thread.currentThread().getId());
+			if (ignoreMouseEvent)
+				return;
 			if (buttonPressed == MouseEvent.BUTTON3) //No dragging for right mouse button.
 				return;
 			
@@ -108,6 +108,7 @@ public class MineFieldPane extends JPanel{
 				if (c != null) //If we dragged to a new cell, press the new group. Ignore if we dragged outside the cell area.
 					pressGroup(c.getCoordinate());
 			}
+			System.out.println("END Dragged " + Thread.currentThread().getId());
 		}
 
 		/**
@@ -116,9 +117,12 @@ public class MineFieldPane extends JPanel{
 		 */
 		@Override
 		public void mousePressed(MouseEvent e) {
+			if (ignoreMouseEvent)
+				return;
+			controller.pressedStateStarted();
 			
-			System.out.println(Thread.currentThread().getId());
 			CellGui c = getCell(e);
+//			System.out.println("Pressed " + Thread.currentThread().getId() + " " + e.getPoint() + " " + c.getCoordinate());
 			buttonPressed = e.getButton(); //Save the type of button pressed.
 			
 			if (c == null) //If not pressed over the cell, nothing to do.
@@ -133,27 +137,38 @@ public class MineFieldPane extends JPanel{
 				pressGroup(c.getCoordinate());
 			}else
 				throw new AssertionError();
+			
+			System.out.println("END Pressed " + Thread.currentThread().getId());
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
+			if (ignoreMouseEvent)
+				return;
+			controller.pressedStateEnded(); 
 			buttonPressed = -1;
-			System.out.println(Thread.currentThread().getId());
-			System.out.println("released");
 			
 			if (e.getButton() == MouseEvent.BUTTON2)
 				unpressGroup();
 			else if (e.getButton() == MouseEvent.BUTTON1){
 				CellGui c = getCell(e);
 				if (c != null){ //If button was released over the cell
-					System.out.println(pressedCell.getCoordinate() + " - " + c.getCoordinate());
-					assert pressedCell == c;
+					
+					if (pressedCell != c){ 
+						//For rare cases when the mouse somehow manages to be released on an unpressed cell 
+						//Press is on another cell and release is on another one (adjacent)  without drag event which
+						//would set the cell as pressed.
+						System.out.println("The \ncase!!!!!\n!!\n!!!\n!!\n!!\n!!\n!!!!!!!!");
+						pressedCell.unpressMouse();
+						c.mousePressed(MouseEvent.BUTTON1);
+					}
 					c.mouseReleased();
 					pressedCell = null;
 				}else{ //Was released not over the cell - because of drag, there cannot be pressed cell in this situation.
 					assert pressedCell == null;
 				}
 			}
+			System.out.println("END released " + Thread.currentThread().getId());
 		}
 		
 		
