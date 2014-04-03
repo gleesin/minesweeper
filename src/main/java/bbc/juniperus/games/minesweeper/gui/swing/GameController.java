@@ -131,14 +131,4 @@ public class GameController implements CellGuiObserver{
 			
 			gamePane.updateMineField(coordinate);
 	}
-
-
-	public void pressedStateStarted() {
-		gamePane.setFace(Face.SUSPENDED);
-		
-	}
-
-	public void pressedStateEnded() {
-		gamePane.setFace(Face.NORMAL);
-	}
 }
