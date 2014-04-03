@@ -34,7 +34,7 @@ public class GameView extends JPanel{
 		setBackground(MAIN_COLOR);
 		setBorder(BORDER);
 		
-		mineFieldPane = new MineFieldPane();
+		mineFieldPane = new MineFieldPane(this);
 		add(mineFieldPane);
 		
 		upperPane = new UpperPane();

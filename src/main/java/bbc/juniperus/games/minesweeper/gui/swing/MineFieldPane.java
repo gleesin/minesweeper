@@ -15,6 +15,7 @@ import javax.swing.border.Border;
 import bbc.juniperus.games.minesweeper.core.CellInfo;
 import bbc.juniperus.games.minesweeper.core.Coordinate;
 import bbc.juniperus.games.minesweeper.core.GameInfo;
+import bbc.juniperus.games.minesweeper.gui.swing.FaceButton.Face;
 
 public class MineFieldPane extends JPanel{
 
@@ -22,22 +23,20 @@ public class MineFieldPane extends JPanel{
 
 	private Map<Coordinate,CellGui> cells = new HashMap<Coordinate,CellGui>();
 	private static final Border BORDER = new CellBorder(3,GameView.DARK_COLOR, GameView.LIGHT_COLOR); 
-	private GameController controller;
 	private boolean ignoreMouseEvent;
+	private GameView gameView;
 	
 	
-	MineFieldPane(){
-	
+	MineFieldPane(GameView gameView){
 		MouseAdapter listener = new TheMouseListener();
+		this.gameView = gameView;
 		addMouseListener(listener);
 		addMouseMotionListener(listener);
 	}
 	
-	
 	public void newGame(GameInfo gameInfo, GameController controller){
 		setLayout(new GridLayout(gameInfo.getRowCount(),gameInfo.getColumnCount()));
 		setBorder(BORDER);
-		this.controller = controller;
 		ignoreMouseEvent = false;
 		
 		
@@ -108,7 +107,6 @@ public class MineFieldPane extends JPanel{
 				if (c != null) //If we dragged to a new cell, press the new group. Ignore if we dragged outside the cell area.
 					pressGroup(c.getCoordinate());
 			}
-			System.out.println("END Dragged " + Thread.currentThread().getId());
 		}
 
 		/**
@@ -119,7 +117,9 @@ public class MineFieldPane extends JPanel{
 		public void mousePressed(MouseEvent e) {
 			if (ignoreMouseEvent)
 				return;
-			controller.pressedStateStarted();
+			
+			if (e.getButton() == MouseEvent.BUTTON1)
+				gameView.setFace(Face.SUSPENDED);
 			
 			CellGui c = getCell(e);
 //			System.out.println("Pressed " + Thread.currentThread().getId() + " " + e.getPoint() + " " + c.getCoordinate());
@@ -145,7 +145,7 @@ public class MineFieldPane extends JPanel{
 		public void mouseReleased(MouseEvent e) {
 			if (ignoreMouseEvent)
 				return;
-			controller.pressedStateEnded(); 
+			gameView.setFace(Face.NORMAL);
 			buttonPressed = -1;
 			
 			if (e.getButton() == MouseEvent.BUTTON2)

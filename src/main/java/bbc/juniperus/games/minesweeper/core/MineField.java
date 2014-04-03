@@ -11,10 +11,10 @@ import java.util.Set;
 
 public class MineField {
 		
-	private int columnsCount;
-	private int rowsCount;
-	private int minesCount;
-	private int cellsCount;
+	private int columnCount;
+	private int rowCount;
+	private int mineCount;
+	private int cellCount;
 	private Map<Coordinate,Cell> cells;
 	private List<Cell> mines = new ArrayList<Cell>();
 	private boolean mineHit;
@@ -22,21 +22,22 @@ public class MineField {
 	private GameInfo gameInfo;
 	private int flagsLeft;
 	
-	public MineField(int colsNo, int rowsNo,float mineRatio){
-		this.columnsCount =colsNo;
-		this.rowsCount = rowsNo;
+	public MineField(int columnCount, int rowCount, int mineCount){
+		this.columnCount =columnCount;
+		this.rowCount = rowCount;
+		this.mineCount = mineCount;
 		
-		cellsCount = colsNo * rowsNo;
-		cells = new HashMap<Coordinate,Cell>(cellsCount);
-		minesCount = (int) (cellsCount * mineRatio);
-		flagsLeft = minesCount;
+		cellCount = columnCount * rowCount;
+		cells = new HashMap<Coordinate,Cell>(cellCount);
+		
+		flagsLeft = mineCount;
 		
 		Set<Integer> mineIndexes = getMineIndexes();
 		
 		//Create mine field cells.
 		int index =0;
-		for (int row = 0; row < rowsNo; row++){
-			for (int col = 0; col < colsNo; col++){
+		for (int row = 0; row < rowCount; row++){
+			for (int col = 0; col < columnCount; col++){
 				Cell cell = new Cell(col,row);
 				//Put mine.
 				if (mineIndexes.contains(index)){
@@ -61,12 +62,12 @@ public class MineField {
 		return getCell(x,y).getCellInfo();
 	}
 	
-	public int getWidth(){
-		return columnsCount;
+	public int getColumnCount(){
+		return columnCount;
 	}
 	
-	public int getHeight(){
-		return rowsCount;
+	public int getRowCount(){
+		return rowCount;
 	}
 	
 	public boolean isGameOver(){
@@ -80,10 +81,10 @@ public class MineField {
 	
 	public List<Coordinate> revealCell(Coordinate coordinate){
 	
-		if (coordinate.x < 0 || coordinate.x >= columnsCount)
-			throw new IllegalArgumentException("Coordinate.x is not within bounds 0 - " + (columnsCount-1));
-		if (coordinate.y < 0 || coordinate.y >= rowsCount)
-			throw new IllegalArgumentException("Coordinate.y is not within bounds 0 - " + (rowsCount-1));
+		if (coordinate.x < 0 || coordinate.x >= columnCount)
+			throw new IllegalArgumentException("Coordinate.x is not within bounds 0 - " + (columnCount-1));
+		if (coordinate.y < 0 || coordinate.y >= rowCount)
+			throw new IllegalArgumentException("Coordinate.y is not within bounds 0 - " + (rowCount-1));
 		
 		Cell cell = cells.get(coordinate);
 		
@@ -116,7 +117,7 @@ public class MineField {
 				throw new IllegalStateException("There cannot be more flags then mines");
 			flagsLeft--;
 		}else{
-			if (flagsLeft == minesCount)
+			if (flagsLeft == mineCount)
 				throw new IllegalStateException("Cannot remove flag. There should be no flag in the field.");
 			flagsLeft++;
 		}
@@ -137,10 +138,10 @@ public class MineField {
 	
 	
 	private Set<Integer> getMineIndexes(){
-		Set<Integer> mineCells = new HashSet<Integer>(minesCount);
+		Set<Integer> mineCells = new HashSet<Integer>(mineCount);
 		Random random = new Random();
-		for (int i = 0; i < minesCount;i++){
-			int index = random.nextInt(cellsCount);
+		for (int i = 0; i < mineCount;i++){
+			int index = random.nextInt(cellCount);
 			//If the number has been already picked add
 			//one more iteration.
 			if (!mineCells.add(index))
@@ -153,8 +154,8 @@ public class MineField {
 	public String debugImg(){
 		StringBuilder sb = new StringBuilder();
 		
-		for (int h = 0; h < getHeight(); h++){
-			for (int w = 0; w < getWidth(); w++){
+		for (int h = 0; h < getRowCount(); h++){
+			for (int w = 0; w < getColumnCount(); w++){
 				Cell c = getCell(w, h);
 				
 //				System.out.print(c.getCoordinate() + " ");
@@ -253,12 +254,12 @@ public class MineField {
 
 				@Override
 				public int getRowCount() {
-					return getHeight();
+					return MineField.this.getRowCount();
 				}
 
 				@Override
 				public int getColumnCount() {
-					return getWidth();
+					return MineField.this.getColumnCount();
 				}
 
 				@Override

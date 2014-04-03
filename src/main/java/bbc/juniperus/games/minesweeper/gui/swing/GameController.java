@@ -21,7 +21,7 @@ public class GameController implements CellGuiObserver{
 	private GameOptions options;
 
 	public GameController(GameOptions options, GameView gamePane){
-		this.field = new MineField(options.getColumCount(),options.getColumCount(), options.getMinesRatio());
+		this.field = new MineField(options.getColumCount(),options.getRowCount(), options.getMineCount());
 		this.gamePane = gamePane;
 		this.options = options;
 		
@@ -31,17 +31,17 @@ public class GameController implements CellGuiObserver{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				newGame();
+				startNewGame();
 			}
 			
 		});
 	}
 	
 	
-	private void newGame(){
+	public void startNewGame(){
 		secondsPassed = 0;
 		timerOn = false;
-		field = new MineField(options.getColumCount(),options.getColumCount(), options.getMinesRatio());
+		field = new MineField(options.getColumCount(),options.getRowCount(), options.getMineCount());
 		gamePane.newGame(field.getGameInfo(), this);
 		gamePane.setFlagDisplayNumber(field.getLeftFlagsCount());
 		gamePane.setTimeDisplayNumber(0);
@@ -116,7 +116,8 @@ public class GameController implements CellGuiObserver{
 			if (info.hasFlag()){ //If has flag, remove flag and add question mark.
 				assert !info.hasQuestionMark();
 				removeFlag(coordinate);
-				field.setQuestionMark(coordinate, true);
+				if (options.hasQuestionMarks())
+					field.setQuestionMark(coordinate, true);
 			}else if (info.hasQuestionMark()){ //Has question mark, remove question mark (flag shout not be there!).
 				assert !info.hasFlag();
 				field.setQuestionMark(coordinate, false);

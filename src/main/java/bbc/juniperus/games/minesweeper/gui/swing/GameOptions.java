@@ -2,15 +2,54 @@ package bbc.juniperus.games.minesweeper.gui.swing;
 
 public class GameOptions {
 	
+	public enum Difficulty {
+		EASY(9, 9, 10), MEDIUM(16, 16, 40), HARD(30, 16 , 99);
+		
+		private final int rowCount, columnCount, mineCount;
+		
+		Difficulty(int columnCount, int rowCount,int mineCount){
+			this.rowCount = rowCount;
+			this.columnCount = columnCount;
+			this.mineCount = mineCount;
+		}
+
+		public int getRowCount() {
+			return rowCount;
+		}
+
+		public int getColumnCount() {
+			return columnCount;
+		}
+
+		public int getMineCount() {
+			return mineCount;
+		}
+		
+	};
+	
 	private boolean questionMarks = true;
-	private int rowCount = 15;
-	private int columCount = 15;
-	private float minesRatio = 0.15f;
+	private int rowCount;
+	private int columnCount;
+	private int mineCount;
+	private Difficulty difficulty;
 	
 	
+	public GameOptions() {
+		setDifficulty(Difficulty.HARD);
+	}
 	
+	public void setDifficulty(Difficulty difficulty){
+		this.difficulty = difficulty;
+		setColumnCount(difficulty.getColumnCount());
+		setRowCount(difficulty.getRowCount());
+		setMineCount(difficulty.getMineCount());
+	}
 	
-	public boolean isQuestionMarks() {
+	public Difficulty getDifficulty(){
+		return difficulty;
+	}
+	
+	public boolean hasQuestionMarks() {
 		return questionMarks;
 	}
 	public void setQuestionMarks(boolean questionMarks) {
@@ -23,17 +62,19 @@ public class GameOptions {
 		this.rowCount = rowCount;
 	}
 	public int getColumCount() {
-		return columCount;
+		return columnCount;
 	}
-	public void setColumCount(int columCount) {
-		this.columCount = columCount;
+	public void setColumnCount(int columnCount) {
+		this.columnCount = columnCount;
 	}
-	public float getMinesRatio() {
-		return minesRatio;
+	public int getMineCount() {
+		return mineCount;
 	}
-	public void setMinesRatio(float minesRatio) {
-		this.minesRatio = minesRatio;
+	public void setMineCount(int mineCount) {
+		this.mineCount = mineCount;
 	}
+	
+	
 	
 	
 }
