@@ -9,7 +9,7 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.border.Border;
 
-import bbc.juniperus.games.minesweeper.gui.swing.ResourceManager.ImageSetResource;
+import bbc.juniperus.games.minesweeper.gui.swing.ResourceLoader.ImageSetResource;
 
 
 @SuppressWarnings("serial")
@@ -22,7 +22,7 @@ public class FaceButton extends JButton{
 	private static final Border BORDER = BorderFactory.createCompoundBorder(OUTSIDE_BORDER, INSIDE_BORDER);
 	private static final Border BORDER_PRESSED = BorderFactory.createCompoundBorder(OUTSIDE_BORDER, INSIDE_BORDER_PRESSED);
 	
-	private static final Icon[] faceIcons = ResourceManager.getInstance().createIconSet(ImageSetResource.FACES, 17);
+	private static final Icon[] faceIcons = ResourceLoader.getInstance().createIconSet(ImageSetResource.FACES, 17);
 	
 	
 	//Need to keep the enum order as it is! Determines icon from icon array. (Lazy, not ideal, solution).
@@ -34,7 +34,7 @@ public class FaceButton extends JButton{
 		setBorder(BORDER);
 		setBackground(GameView.MAIN_COLOR);
 		setContentAreaFilled(false);
-		
+		setFocusable(false);
 		//Mouse listener for changing the look accordingly,
 		addMouseListener(new MouseAdapter(){
 			

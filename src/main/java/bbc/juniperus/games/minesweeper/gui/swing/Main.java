@@ -14,14 +14,19 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import bbc.juniperus.games.minesweeper.gui.swing.GameOptions.Difficulty;
 
 public class Main {
 
+	
 	enum MenuAction {
 		NEW_GAME("New game"), BEGINNER("Beginner"), 
-		INTERMEDIATE("Intermediate"), EXPERT("Expert"), EXIT("Exit");
+		INTERMEDIATE("Intermediate"), EXPERT("Expert"), 
+		QUESTION_MARKS("Marks (?)"), SOUND ("Sound"),
+		EXIT("Exit");
 		
 		private final String name;
 		
@@ -35,6 +40,7 @@ public class Main {
 		
 	};
 	
+	private final String TITLE = "Minesweeper";
 	private JMenuBar menuBar;
 	private GameController gameController;
 	private GameOptions options;
@@ -42,9 +48,22 @@ public class Main {
 	private Map<MenuAction, Action> actions = new HashMap<>();
 	
 	public Main(){
+		
+		System.out.println(UIManager.getSystemLookAndFeelClassName());
+		
+		try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+			//UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException | InstantiationException
+				| IllegalAccessException | UnsupportedLookAndFeelException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			
+		}
+		
 		System.out.println("constructing");
 		try {
-			ResourceManager.getInstance().initialize();
+			ResourceLoader.getInstance().initialize();
 		} catch (ResourceLoadingException e) {
 			e.printStackTrace();
 		}
@@ -71,6 +90,9 @@ public class Main {
 		menuBar = createMenuBar();
 		
 		window = new JFrame();
+		window.setTitle(TITLE);
+		window.setIconImage(ResourceLoader.getInstance().getApplicationImage());
+		window.setResizable(false);
 		window.setJMenuBar(menuBar);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//window.setSize(WIDTH, HEIGHT);
@@ -90,8 +112,10 @@ public class Main {
 		result.put(MenuAction.BEGINNER, new NewGameAction(MenuAction.BEGINNER.getName(), Difficulty.EASY));
 		result.put(MenuAction.INTERMEDIATE, new NewGameAction(MenuAction.INTERMEDIATE.getName(), Difficulty.MEDIUM));
 		result.put(MenuAction.EXPERT, new NewGameAction(MenuAction.EXPERT.getName(), Difficulty.HARD));
-		
+		result.put(MenuAction.QUESTION_MARKS, new SetQuestionMarksAction(MenuAction.QUESTION_MARKS.getName()));
+		result.put(MenuAction.SOUND, new SetQuestionMarksAction(MenuAction.SOUND.getName()));
 		result.put(MenuAction.EXIT, new ExitGameAction(MenuAction.EXIT.getName()));
+		
 		
 		return result;
 	}
@@ -124,6 +148,16 @@ public class Main {
 			intermediate.setSelected(true);
 		else if (options.getDifficulty() == Difficulty.HARD)
 			expert.setSelected(true);
+		
+		gameMenu.addSeparator();
+		
+		JCheckBoxMenuItem marks = new JCheckBoxMenuItem(actions.get(MenuAction.QUESTION_MARKS));
+		marks.setSelected(options.hasQuestionMarks());
+		gameMenu.add(marks);
+		
+		JCheckBoxMenuItem sound = new JCheckBoxMenuItem(actions.get(MenuAction.SOUND));
+		marks.setSelected(options.isSound());
+		gameMenu.add(sound);
 		
 		gameMenu.addSeparator();
 		
@@ -165,6 +199,35 @@ public class Main {
 		}
 		
 	}
+	
+	@SuppressWarnings("serial")
+	private class SetQuestionMarksAction extends AbstractAction{
+
+		public SetQuestionMarksAction(String name) {
+			super(name);
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			options.setQuestionMarks(!options.hasQuestionMarks());
+		}
+	}
+	
+	
+	@SuppressWarnings("serial")
+	private class SetSoundAction extends AbstractAction{
+
+		public SetSoundAction(String name) {
+			super(name);
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+		}
+	}
+	
+	
 	
 	@SuppressWarnings("serial")
 	private class ExitGameAction extends AbstractAction{

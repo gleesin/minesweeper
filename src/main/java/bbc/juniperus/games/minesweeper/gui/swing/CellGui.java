@@ -16,8 +16,8 @@ import javax.swing.border.Border;
 
 import bbc.juniperus.games.minesweeper.core.CellInfo;
 import bbc.juniperus.games.minesweeper.core.Coordinate;
-import bbc.juniperus.games.minesweeper.gui.swing.ResourceManager.ImageResource;
-import bbc.juniperus.games.minesweeper.gui.swing.ResourceManager.ImageSetResource;
+import bbc.juniperus.games.minesweeper.gui.swing.ResourceLoader.ImageResource;
+import bbc.juniperus.games.minesweeper.gui.swing.ResourceLoader.ImageSetResource;
 
 @SuppressWarnings("serial")
 public class CellGui extends JPanel {
@@ -34,11 +34,11 @@ public class CellGui extends JPanel {
 	
 	private static final Border border = new CellBorder(BORDER_WIDTH, GameView.LIGHT_COLOR, colorBorder);
 	private static final Border borderRevealed = BorderFactory.createMatteBorder(1, 1, 0, 0, colorBorder);
-	private static final Icon[] numberIcons = ResourceManager.getInstance().createIconSet(ImageSetResource.MINEFIELD_NUMBERS, 10);
-	private static final Icon mineIcon = ResourceManager.getInstance().createIcon(ImageResource.MINE, 13);
-	private static final Icon crossedMineIcon = ResourceManager.getInstance().createIcon(ImageResource.CROSSED_MINE, 13);
-	private static final Icon questionMarkIcon = ResourceManager.getInstance().createIcon(ImageResource.QUESTION_MARK, 6);
-	private static final Icon flagIcon = ResourceManager.getInstance().createIcon(ImageResource.FLAG, 8);
+	private static final Icon[] numberIcons = ResourceLoader.getInstance().createIconSet(ImageSetResource.MINEFIELD_NUMBERS, 10);
+	private static final Icon mineIcon = ResourceLoader.getInstance().createIcon(ImageResource.MINE, 13);
+	private static final Icon crossedMineIcon = ResourceLoader.getInstance().createIcon(ImageResource.CROSSED_MINE, 13);
+	private static final Icon questionMarkIcon = ResourceLoader.getInstance().createIcon(ImageResource.QUESTION_MARK, 6);
+	private static final Icon flagIcon = ResourceLoader.getInstance().createIcon(ImageResource.FLAG, 8);
 
 	private static final Border labelPressedBorder = BorderFactory.createEmptyBorder(1, 1, 0, 0);
 	

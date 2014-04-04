@@ -32,6 +32,7 @@ public class GameOptions {
 	private int columnCount;
 	private int mineCount;
 	private Difficulty difficulty;
+	private boolean sound;
 	
 	
 	public GameOptions() {
@@ -73,8 +74,13 @@ public class GameOptions {
 	public void setMineCount(int mineCount) {
 		this.mineCount = mineCount;
 	}
-	
-	
-	
+
+	public boolean isSound() {
+		return sound;
+	}
+
+	public void setSound(boolean sound) {
+		this.sound = sound;
+	}
 	
 }

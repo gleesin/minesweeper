@@ -2,7 +2,6 @@ package bbc.juniperus.games.minesweeper.gui.swing;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -16,7 +15,7 @@ import javax.swing.ImageIcon;
  * needs to be invoked. This ensured that all resources are loaded from the file system.
  *
  */
-public class ResourceManager {
+public class ResourceLoader {
 
 	private static final String PATH_MINEFIELD_NUMBERS = "numbers.png";
 	private static final String PATH_DISPLAY_NUMBERS = "display.png";
@@ -24,6 +23,7 @@ public class ResourceManager {
 	private static final String PATH_FLAG = "flag.png";
 	private static final String PATH_QUESTION_MARK = "question_mark.png";
 	private static final String PATH_FACES = "faces.png";
+	private static final String PATH_APP_ICON = "icon.png";
 	
 	private static final int MINEFIELD_NUMBER_IMG_WIDTH = 20;
 	private static final int DISPLAY_NUMBER_IMG_WIDTH = 26;
@@ -35,8 +35,9 @@ public class ResourceManager {
 
 	private Image[] minefieldNumbers, displayNumbers, faces;
 	private Image imgMine, imgCrossedMine, imgFlag, imgQuestionMark;
+	private Image appImage;
 	
-	private static ResourceManager instance;
+	private static ResourceLoader instance;
 	private boolean initialized;
 
 	public enum  ImageResource {
@@ -68,7 +69,7 @@ public class ResourceManager {
 	/**
 	 * Private constructor
 	 */
-	private ResourceManager(){
+	private ResourceLoader(){
 
 	}
 
@@ -76,10 +77,15 @@ public class ResourceManager {
 	 * Returns singleton instance.
 	 * @return singleton instance of ResourceManager
 	 */
-	synchronized public static ResourceManager getInstance(){
+	synchronized public static ResourceLoader getInstance(){
 		if (instance == null)
-			instance = new ResourceManager();
+			instance = new ResourceLoader();
 		return instance;
+	}
+	
+	
+	public Image getApplicationImage(){
+		return appImage;
 	}
 	
 	/**
@@ -101,6 +107,8 @@ public class ResourceManager {
 			
 			displayNumbers = loadImagesFromSprite(PATH_DISPLAY_NUMBERS, DISPLAY_NUMBER_IMG_WIDTH, 11);
 			faces = loadImagesFromSprite(PATH_FACES, FACE_IMG_WIDTH, 4);
+			
+			appImage = loadImg(PATH_APP_ICON);
 			
 		} catch (URISyntaxException | IOException e) {
 			e.printStackTrace();
@@ -183,7 +191,6 @@ public class ResourceManager {
 	
 	
 	/**
-	 * Routine for verifying whether the resource manager has been initialized.
 	 * Throws exception if not.
 	 * @throw {@link IllegalStateException} if the manager is not initialized
 	 */
@@ -194,8 +201,7 @@ public class ResourceManager {
 	
 	private Image[] loadImagesFromSprite(String imgPath, int width, int count) throws URISyntaxException, IOException{
 		URL url = getClass().getResource(imgPath);
-		File f = new File(url.toURI());
-		BufferedImage img = ImageIO.read(f);
+		BufferedImage img = ImageIO.read(url);
 		
 		Image[] result = new BufferedImage[count];
 		
@@ -214,8 +220,7 @@ public class ResourceManager {
 	
 	private Image loadImg(String path) throws URISyntaxException, IOException{
 		URL url = getClass().getResource(path);
-		File f = new File(url.toURI());
-		return ImageIO.read(f);
+		return ImageIO.read(url);
 	}
 	
 }
