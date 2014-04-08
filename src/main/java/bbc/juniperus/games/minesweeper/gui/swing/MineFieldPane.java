@@ -122,7 +122,6 @@ public class MineFieldPane extends JPanel{
 				gameView.setFace(Face.SUSPENDED);
 			
 			CellGui c = getCell(e);
-//			System.out.println("Pressed " + Thread.currentThread().getId() + " " + e.getPoint() + " " + c.getCoordinate());
 			buttonPressed = e.getButton(); //Save the type of button pressed.
 			
 			if (c == null) //If not pressed over the cell, nothing to do.
@@ -138,7 +137,6 @@ public class MineFieldPane extends JPanel{
 			}else
 				throw new AssertionError();
 			
-			System.out.println("END Pressed " + Thread.currentThread().getId());
 		}
 
 		@Override
@@ -158,7 +156,10 @@ public class MineFieldPane extends JPanel{
 						//For rare cases when the mouse somehow manages to be released on an unpressed cell 
 						//Press is on another cell and release is on another one (adjacent)  without drag event which
 						//would set the cell as pressed.
-						System.out.println("The \ncase!!!!!\n!!\n!!!\n!!\n!!\n!!\n!!!!!!!!");
+						
+						if (pressedCell == null) //When we had no pressed cell (happens when clicking on field when menu is displayed).
+							return;
+						
 						pressedCell.unpressMouse();
 						c.mousePressed(MouseEvent.BUTTON1);
 					}
@@ -168,7 +169,6 @@ public class MineFieldPane extends JPanel{
 					assert pressedCell == null;
 				}
 			}
-			System.out.println("END released " + Thread.currentThread().getId());
 		}
 		
 		

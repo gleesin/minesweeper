@@ -2,12 +2,22 @@ package bbc.juniperus.games.minesweeper.gui.swing;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultButtonModel;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -99,6 +109,45 @@ public class Main {
 		
 		window.add(gamePane);
 		window.pack();
+		
+		
+		URL sound = getClass().getResource("explosion.wav");
+		System.out.println("url " + sound);
+		
+		AudioInputStream audio = null;
+		try {
+			audio = AudioSystem.getAudioInputStream(new File(sound.toURI()));
+		} catch (UnsupportedAudioFileException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        Clip clip = null;
+		try {
+			clip = AudioSystem.getClip();
+		} catch (LineUnavailableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+        try {
+			clip.open(audio);
+		} catch (LineUnavailableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        clip.start();
+		
+		
 	}
 	
 	
@@ -120,6 +169,7 @@ public class Main {
 		return result;
 	}
 	
+	@SuppressWarnings("serial")
 	private JMenuBar createMenuBar(){
 		JMenuBar resultMenuBar = new JMenuBar();
 		JMenu gameMenu = new JMenu("Game");
@@ -152,7 +202,13 @@ public class Main {
 		gameMenu.addSeparator();
 		
 		JCheckBoxMenuItem marks = new JCheckBoxMenuItem(actions.get(MenuAction.QUESTION_MARKS));
-		marks.setSelected(options.hasQuestionMarks());
+		marks.setModel(new DefaultButtonModel(){
+			@Override
+			public boolean isSelected(){
+				return options.hasQuestionMarks();
+			}
+		});
+		//marks.setSelected(options.hasQuestionMarks());
 		gameMenu.add(marks);
 		
 		JCheckBoxMenuItem sound = new JCheckBoxMenuItem(actions.get(MenuAction.SOUND));
@@ -171,7 +227,6 @@ public class Main {
 		
 		return resultMenuBar;
 	}
-	
 	
 	@SuppressWarnings("serial")
 	private class NewGameAction extends AbstractAction{
