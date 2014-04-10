@@ -2,6 +2,9 @@ package bbc.juniperus.games.minesweeper.gui.swing;
 
 import java.io.IOException;
 
+import javax.media.Manager;
+import javax.media.NoPlayerException;
+import javax.media.Player;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -14,7 +17,8 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class SoundPlayer {
 	private Clip clip;
-	private String sound = "bomb.wav";
+	private String sound = "explosion.wav";
+	private Player player;
 
 	public SoundPlayer() {
 		try {
@@ -26,6 +30,18 @@ public class SoundPlayer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		try {
+			player = Manager.createPlayer(this.getClass().getResource(sound));
+			player.realize();
+		} catch (NoPlayerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	
@@ -50,18 +66,20 @@ public class SoundPlayer {
 	}
 	
 	public void playSound(){
-	
+	/*
 
 		System.out.println(clip.getFrameLength());
 		clip.start();	
+		*/
+		player.start();
 	}
 	
 	public static void main(String[] args) throws InterruptedException{
 		
 		SoundPlayer sp = new SoundPlayer();
-		Thread.sleep(2000); //Let open the file
+		//Thread.sleep(1000); //Let open the file
 		sp.playSound();
-		Thread.sleep(10000); //Wait for the playback to finish
+		//Thread.sleep(10000); //Wait for the playback to finish
 	}
 	
 	/*
