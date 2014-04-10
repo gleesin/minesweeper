@@ -1,7 +1,6 @@
 package bbc.juniperus.games.minesweeper.gui.swing;
 
 import java.awt.GridLayout;
-import java.awt.Image;
 
 import javax.swing.Icon;
 import javax.swing.JLabel;
@@ -15,7 +14,6 @@ public class Display extends JPanel{
 	private static final int DIGIT_COUNT = 3;
 	private JLabel[] labels = new JLabel[DIGIT_COUNT];
 	private Icon[] numbers = ResourceLoader.getInstance().createIconSet(ImageSetResource.DISPLAY_NUMBERS,13);
-	private Image img;
 	public Display(){
 		GridLayout layout = new GridLayout(1,DIGIT_COUNT);
 		setLayout(layout);

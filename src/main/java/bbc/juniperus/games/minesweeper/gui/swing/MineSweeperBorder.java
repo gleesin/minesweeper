@@ -7,12 +7,12 @@ import java.awt.Insets;
 
 import javax.swing.border.Border;
 
-public class CellBorder implements Border{
+public class MineSweeperBorder implements Border{
 
 	private int borderWidth;
 	private Color topLeftColor,bottomRightColor;
 
-	public CellBorder(int width, Color topLeft, Color bottomRight){
+	public MineSweeperBorder(int width, Color topLeft, Color bottomRight){
 		borderWidth = width;
 		topLeftColor = topLeft;
 		bottomRightColor = bottomRight;

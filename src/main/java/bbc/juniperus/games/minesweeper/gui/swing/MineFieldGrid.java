@@ -17,17 +17,17 @@ import bbc.juniperus.games.minesweeper.core.Coordinate;
 import bbc.juniperus.games.minesweeper.core.GameInfo;
 import bbc.juniperus.games.minesweeper.gui.swing.FaceButton.Face;
 
-public class MineFieldPane extends JPanel{
+public class MineFieldGrid extends JPanel{
 
 	private static final long serialVersionUID = 1L;
 
-	private Map<Coordinate,CellGui> cells = new HashMap<Coordinate,CellGui>();
-	private static final Border BORDER = new CellBorder(3,GameView.DARK_COLOR, GameView.LIGHT_COLOR); 
+	private Map<Coordinate,CellView> cells = new HashMap<Coordinate,CellView>();
+	private static final Border BORDER = new MineSweeperBorder(3,GameView.DARK_COLOR, GameView.LIGHT_COLOR); 
 	private boolean ignoreMouseEvent;
 	private GameView gameView;
 	
 	
-	MineFieldPane(GameView gameView){
+	MineFieldGrid(GameView gameView){
 		MouseAdapter listener = new TheMouseListener();
 		this.gameView = gameView;
 		addMouseListener(listener);
@@ -43,7 +43,7 @@ public class MineFieldPane extends JPanel{
 		for (int y = 0; y < gameInfo.getRowCount(); y++)
 			for (int x = 0; x < gameInfo.getColumnCount(); x++){
 				CellInfo cellInfo = gameInfo.getCellInfo(x, y);
-				CellGui cell = new CellGui(cellInfo);
+				CellView cell = new CellView(cellInfo);
 				cell.addListener(controller);
 				add(cell);
 				cells.put(cellInfo.getCoordinate(),cell);
@@ -72,8 +72,8 @@ public class MineFieldPane extends JPanel{
 	
 	private class TheMouseListener extends MouseAdapter{
 		
-		private CellGui pressedCell;
-		private List<CellGui> pressedCells = new ArrayList<>();
+		private CellView pressedCell;
+		private List<CellView> pressedCells = new ArrayList<>();
 		private int buttonPressed;
 		
 		
@@ -84,7 +84,7 @@ public class MineFieldPane extends JPanel{
 			if (buttonPressed == MouseEvent.BUTTON3) //No dragging for right mouse button.
 				return;
 			
-			CellGui c = getCell(e);
+			CellView c = getCell(e);
 			
 			if (buttonPressed == MouseEvent.BUTTON1){
 				assert pressedCells.size() == 0; //No group press is active
@@ -121,7 +121,7 @@ public class MineFieldPane extends JPanel{
 			if (e.getButton() == MouseEvent.BUTTON1)
 				gameView.setFace(Face.SUSPENDED);
 			
-			CellGui c = getCell(e);
+			CellView c = getCell(e);
 			buttonPressed = e.getButton(); //Save the type of button pressed.
 			
 			if (c == null) //If not pressed over the cell, nothing to do.
@@ -149,7 +149,7 @@ public class MineFieldPane extends JPanel{
 			if (e.getButton() == MouseEvent.BUTTON2)
 				unpressGroup();
 			else if (e.getButton() == MouseEvent.BUTTON1){
-				CellGui c = getCell(e);
+				CellView c = getCell(e);
 				if (c != null){ //If button was released over the cell
 					
 					if (pressedCell != c){ 
@@ -177,29 +177,29 @@ public class MineFieldPane extends JPanel{
 			
 			for (int y = co.y - 1; y < co.y + 2;y++)
 				for (int x = co.x - 1; x < co.x + 2; x++){
-					CellGui cell = cells.get(new Coordinate(x,y));
+					CellView cell = cells.get(new Coordinate(x,y));
 					if (cell != null)
 						pressedCells.add(cell);
 				}
 			
-			for (CellGui c: pressedCells)
+			for (CellView c: pressedCells)
 				c.mousePressed(MouseEvent.BUTTON2);
 		}
 		
 		private void unpressGroup(){
-			for (CellGui c : pressedCells)
+			for (CellView c : pressedCells)
 				c.unpressMouse();
 			pressedCells.clear();
 		}
 		
-		private CellGui getCell(MouseEvent e){
+		private CellView getCell(MouseEvent e){
 			Component c = getComponentAt(e.getPoint());
 			
 			//If its other component - container itself.
-			if (c instanceof CellGui == false)
+			if (c instanceof CellView == false)
 				return null;
 			else
-				return (CellGui) c;
+				return (CellView) c;
 		}
 		
 	}

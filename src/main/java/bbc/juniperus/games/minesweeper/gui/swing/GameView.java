@@ -25,8 +25,8 @@ public class GameView extends JPanel{
 	private static final Border INSIDE_BORDER = BorderFactory.createLineBorder(MAIN_COLOR,5);
 	private static final Border BORDER = BorderFactory.createCompoundBorder(OUTSIDE_BORDER, INSIDE_BORDER);
 	
-	private UpperPane upperPane;
-	private MineFieldPane mineFieldPane;
+	private DisplayPane upperPane;
+	private MineFieldGrid mineFieldPane;
 	
 	
 	public GameView() {
@@ -34,10 +34,10 @@ public class GameView extends JPanel{
 		setBackground(MAIN_COLOR);
 		setBorder(BORDER);
 		
-		mineFieldPane = new MineFieldPane(this);
+		mineFieldPane = new MineFieldGrid(this);
 		add(mineFieldPane);
 		
-		upperPane = new UpperPane();
+		upperPane = new DisplayPane();
 
 		add(upperPane, BorderLayout.NORTH);
 	}

@@ -9,9 +9,11 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.AbstractAction;
@@ -110,43 +112,14 @@ public class Main {
 		window.add(gamePane);
 		window.pack();
 		
+		/*
+		AudioFormat format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,
+                AudioSystem.NOT_SPECIFIED,
+                16, 2, 4,
+                AudioSystem.NOT_SPECIFIED, true);
+		*/
 		
-		URL sound = getClass().getResource("explosion.wav");
-		System.out.println("url " + sound);
-		
-		AudioInputStream audio = null;
-		try {
-			audio = AudioSystem.getAudioInputStream(new File(sound.toURI()));
-		} catch (UnsupportedAudioFileException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
-		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        Clip clip = null;
-		try {
-			clip = AudioSystem.getClip();
-		} catch (LineUnavailableException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-        try {
-			clip.open(audio);
-		} catch (LineUnavailableException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        clip.start();
-		
+		new SoundPlayer().playSound();
 		
 	}
 	

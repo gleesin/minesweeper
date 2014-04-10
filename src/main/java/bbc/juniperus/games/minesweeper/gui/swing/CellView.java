@@ -20,7 +20,7 @@ import bbc.juniperus.games.minesweeper.gui.swing.ResourceLoader.ImageResource;
 import bbc.juniperus.games.minesweeper.gui.swing.ResourceLoader.ImageSetResource;
 
 @SuppressWarnings("serial")
-public class CellGui extends JPanel {
+public class CellView extends JPanel {
 
 	private enum ButtonAction {LEFT, RIGHT};
 	
@@ -32,7 +32,7 @@ public class CellGui extends JPanel {
 	private static final Color colorHitMine = Color.red;
 	private static final Color colorBorder = GameView.DARK_COLOR;
 	
-	private static final Border border = new CellBorder(BORDER_WIDTH, GameView.LIGHT_COLOR, colorBorder);
+	private static final Border border = new MineSweeperBorder(BORDER_WIDTH, GameView.LIGHT_COLOR, colorBorder);
 	private static final Border borderRevealed = BorderFactory.createMatteBorder(1, 1, 0, 0, colorBorder);
 	private static final Icon[] numberIcons = ResourceLoader.getInstance().createIconSet(ImageSetResource.MINEFIELD_NUMBERS, 10);
 	private static final Icon mineIcon = ResourceLoader.getInstance().createIcon(ImageResource.MINE, 13);
@@ -48,7 +48,7 @@ public class CellGui extends JPanel {
 	private Set<CellGuiObserver> listeners = new HashSet<CellGuiObserver>();
 	private boolean isPressed;
 	
-	public CellGui(final CellInfo  cellInfo){
+	public CellView(final CellInfo  cellInfo){
 		super(new BorderLayout());
 		setBackground(colorBackground);
 		setSize(WIDTH, HEIGHT);

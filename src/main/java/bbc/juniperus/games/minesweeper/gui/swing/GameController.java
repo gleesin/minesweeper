@@ -9,7 +9,6 @@ import javax.swing.Timer;
 import bbc.juniperus.games.minesweeper.core.CellInfo;
 import bbc.juniperus.games.minesweeper.core.Coordinate;
 import bbc.juniperus.games.minesweeper.core.MineField;
-import bbc.juniperus.games.minesweeper.gui.swing.FaceButton.Face;
 
 public class GameController implements CellGuiObserver{
 
@@ -19,6 +18,7 @@ public class GameController implements CellGuiObserver{
 	private int secondsPassed;
 	private Timer timer;
 	private GameOptions options;
+	//private SoundPlayer player = new SoundPlayer();
 
 	public GameController(GameOptions options, GameView gamePane){
 		this.field = new MineField(options.getColumCount(),options.getRowCount(), options.getMineCount());
@@ -45,6 +45,7 @@ public class GameController implements CellGuiObserver{
 		gamePane.newGame(field.getGameInfo(), this);
 		gamePane.setFlagDisplayNumber(field.getLeftFlagsCount());
 		gamePane.setTimeDisplayNumber(0);
+		//player.playSound();
 	}
 	
 	private void gameOver(){
