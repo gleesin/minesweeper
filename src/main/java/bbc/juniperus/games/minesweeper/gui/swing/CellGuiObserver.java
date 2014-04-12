@@ -8,8 +8,8 @@ import bbc.juniperus.games.minesweeper.core.Coordinate;
  *
  */
 public interface CellGuiObserver {
-	
-	void leftButtonActivated(Coordinate coordinate);
-	void rightButtonActivated(Coordinate coordinate);
+    
+    void leftButtonActivated(Coordinate coordinate);
+    void rightButtonActivated(Coordinate coordinate);
 
 }

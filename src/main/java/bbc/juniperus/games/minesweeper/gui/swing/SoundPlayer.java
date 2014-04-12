@@ -1,93 +1,72 @@
 package bbc.juniperus.games.minesweeper.gui.swing;
 
 import java.io.IOException;
+import java.net.URL;
 
 import javax.media.Manager;
 import javax.media.NoPlayerException;
 import javax.media.Player;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.LineEvent;
-import javax.sound.sampled.LineListener;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.media.Time;
+
+import bbc.juniperus.games.minesweeper.gui.swing.ResourceLoader.SoundResource;
 
 public class SoundPlayer {
-	private Clip clip;
-	private String sound = "explosion.wav";
-	private Player player;
+    
+    private Player explosionPlayer, tickPlayer;
+    private URL urlExplosion, urlTick;
+    private boolean isInitialized;
 
-	public SoundPlayer() {
-		try {
-			clip = loadClip();
-		} catch (LineUnavailableException e) {
-			e.printStackTrace();
-		} catch (UnsupportedAudioFileException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		try {
-			player = Manager.createPlayer(this.getClass().getResource(sound));
-			player.realize();
-		} catch (NoPlayerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
-	
-	
-	private Clip loadClip() throws LineUnavailableException, UnsupportedAudioFileException, IOException{
-		AudioInputStream audio = AudioSystem.getAudioInputStream(this.getClass().getResource(sound));
-		AudioFormat format = audio.getFormat();
-		DataLine.Info info = new DataLine.Info(Clip.class, format);
-		final Clip clip =  (Clip) AudioSystem.getLine(info);
-		clip.open(audio);
-		
-		clip.addLineListener(new LineListener() {
-			
-			@Override
-			public void update(LineEvent event) {
-				System.out.println(event);
-				System.out.println(clip.getFramePosition());
-			}
-		});
-		
-		
-		return clip;
-	}
-	
-	public void playSound(){
-	/*
 
-		System.out.println(clip.getFrameLength());
-		clip.start();	
-		*/
-		player.start();
-	}
-	
-	public static void main(String[] args) throws InterruptedException{
-		
-		SoundPlayer sp = new SoundPlayer();
-		//Thread.sleep(1000); //Let open the file
-		sp.playSound();
-		//Thread.sleep(10000); //Wait for the playback to finish
-	}
-	
-	/*
-	FloatControl gainControl = (FloatControl) clip
-	        .getControl(FloatControl.Type.MASTER_GAIN);
-	
-    double gain = 0.1D; // number between 0 and 1 (loudest)
-    float dB = (float) (Math.log(gain) / Math.log(10.0) * 20.0);
-    gainControl.setValue(dB);
-    */
+    public SoundPlayer() {
+
+         urlExplosion = ResourceLoader.getInstance().getSoundResourceUrl(SoundResource.EXPLOSION);
+         urlTick = ResourceLoader.getInstance().getSoundResourceUrl(SoundResource.TICK);
+    	
+    }
+    
+    public void initialize() throws ResourceLoadingException{
+        try {
+            explosionPlayer = Manager.createPlayer(urlExplosion);
+            explosionPlayer.realize();
+    
+            tickPlayer = Manager.createPlayer(urlTick);
+            tickPlayer.realize();
+        } catch (NoPlayerException e) {
+            throw new ResourceLoadingException("Could not initialize the sound player",e);
+        } catch (IOException e) {
+            throw new ResourceLoadingException("Could not initialize the sound player",e);
+        }
+    	
+        isInitialized = true;
+    }
+    
+    private void ensureInitialized(){
+        if (!isInitialized)
+            throw new IllegalStateException("The player is not initialized");
+    }
+    
+    public boolean isInitialized(){
+        return isInitialized;
+    }
+    
+    public void playExplosionSound(){
+        ensureInitialized();
+        explosionPlayer.start();
+    } 
+
+    public void playTickSound(){
+        ensureInitialized();
+        tickPlayer.setMediaTime(new Time(0));
+        tickPlayer.start();
+    } 
+
+//    public static void main(String[] args) throws InterruptedException, ResourceLoadingException{
+//    	
+//        SoundPlayer sp = new SoundPlayer();
+//        sp.initialize();
+//        //Thread.sleep(1000); //Let open the file
+//        sp.playTickSound();
+//        //Thread.sleep(10000); //Wait for the playback to finish
+//    }
+    
 }

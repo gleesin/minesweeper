@@ -7,11 +7,11 @@ package bbc.juniperus.games.minesweeper.core;
  */
 public interface CellInfo {
 
-	Coordinate getCoordinate();
-	boolean isRevealed();
-	boolean hasMine();
-	boolean hasFlag();
-	int getsetNearbyMinesCount();
-	boolean wasMineHit();
-	boolean hasQuestionMark();
+    Coordinate getCoordinate();
+    boolean isRevealed();
+    boolean hasMine();
+    boolean hasFlag();
+    int getsetNearbyMinesCount();
+    boolean wasMineHit();
+    boolean hasQuestionMark();
 }
