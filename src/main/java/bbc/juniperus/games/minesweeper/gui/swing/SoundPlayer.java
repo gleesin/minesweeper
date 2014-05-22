@@ -12,25 +12,28 @@ import bbc.juniperus.games.minesweeper.gui.swing.ResourceLoader.SoundResource;
 
 public class SoundPlayer {
     
-    private Player explosionPlayer, tickPlayer;
-    private URL urlExplosion, urlTick;
+    private Player explosionPlayer, tickPlayer, winPlayer;
+    private URL urlExplosion, urlTick, urlWin;
     private boolean isInitialized;
 
 
     public SoundPlayer() {
-
          urlExplosion = ResourceLoader.getInstance().getSoundResourceUrl(SoundResource.EXPLOSION);
          urlTick = ResourceLoader.getInstance().getSoundResourceUrl(SoundResource.TICK);
-    	
+         urlWin = ResourceLoader.getInstance().getSoundResourceUrl(SoundResource.WIN);
+         
+         
     }
     
     public void initialize() throws ResourceLoadingException{
         try {
             explosionPlayer = Manager.createPlayer(urlExplosion);
             explosionPlayer.realize();
-    
             tickPlayer = Manager.createPlayer(urlTick);
             tickPlayer.realize();
+            winPlayer = Manager.createPlayer(urlWin);
+            winPlayer.realize();
+            
         } catch (NoPlayerException e) {
             throw new ResourceLoadingException("Could not initialize the sound player",e);
         } catch (IOException e) {
@@ -51,6 +54,7 @@ public class SoundPlayer {
     
     public void playExplosionSound(){
         ensureInitialized();
+        explosionPlayer.setMediaTime(new Time(0));
         explosionPlayer.start();
     } 
 
@@ -60,13 +64,10 @@ public class SoundPlayer {
         tickPlayer.start();
     } 
 
-//    public static void main(String[] args) throws InterruptedException, ResourceLoadingException{
-//    	
-//        SoundPlayer sp = new SoundPlayer();
-//        sp.initialize();
-//        //Thread.sleep(1000); //Let open the file
-//        sp.playTickSound();
-//        //Thread.sleep(10000); //Wait for the playback to finish
-//    }
-    
+    public void playWinSound(){
+        ensureInitialized();
+        winPlayer.setMediaTime(new Time(0));
+        winPlayer.start();
+    } 
+
 }

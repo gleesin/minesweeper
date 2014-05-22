@@ -25,7 +25,8 @@ public class ResourceLoader {
     private static final String PATH_FACES = "faces.png";
     private static final String PATH_APP_ICON = "icon.png";
     private static final String PATH_EXPLOSION_SOUND = "explosion.wav";
-    private static final String PATH_TICK_SOUND = "click.wav";
+    private static final String PATH_TICK_SOUND = "tick.wav";
+    private static final String PATH_WIN_SOUND = "win.wav";
     
     private static final int MINEFIELD_NUMBER_IMG_WIDTH = 20;
     private static final int DISPLAY_NUMBER_IMG_WIDTH = 26;
@@ -43,7 +44,7 @@ public class ResourceLoader {
     private boolean initialized;
 
     
-    public enum SoundResource {EXPLOSION, TICK}
+    public enum SoundResource {EXPLOSION, TICK, WIN}
     
     public enum  ImageResource {
         MINE(MINE_IMG_WIDTH), 
@@ -89,12 +90,14 @@ public class ResourceLoader {
     
     
     public URL getSoundResourceUrl(SoundResource sound){
-    	
+
         String path;
         if (sound == SoundResource.EXPLOSION)
             path = PATH_EXPLOSION_SOUND;
         else if (sound == SoundResource.TICK)
             path = PATH_TICK_SOUND;
+        else if (sound == SoundResource.WIN)
+        	path = PATH_WIN_SOUND;
         else
             throw new AssertionError();
         	
