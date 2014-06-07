@@ -18,7 +18,8 @@ public class GameController implements CellGuiObserver{
     private int secondsPassed;
     private Timer timer;
     private GameOptions options;
-    private SoundPlayer soundPlayer = new SoundPlayer();
+    private SoundPlayer soundPlayer;
+    private static final int TIMER_INTERVAL = 1000;
 
     public GameController(GameOptions options, GameView gamePane, SoundPlayer soundPlayer){
         this.field = new MineField(options.getColumCount(),options.getRowCount(), options.getMineCount());
@@ -46,21 +47,22 @@ public class GameController implements CellGuiObserver{
         field = new MineField(options.getColumCount(),options.getRowCount(), options.getMineCount());
         gamePane.newGame(field.getGameInfo(), this);
         gamePane.setFlagDisplayNumber(field.getLeftFlagsCount());
+        stopTimer();
         gamePane.setTimeDisplayNumber(0);
     }
     
-    private void gameOver(){
-        //JOptionPane.showConfirmDialog(null, "Game over piiico");
-        gamePane.gameOver(false);
+    private void gameOver(boolean won){
+        
         stopTimer();
+        
         if (options.isSound())
-            soundPlayer.playExplosionSound();
+            if (won)
+                soundPlayer.playWinSound();
+            else
+                soundPlayer.playExplosionSound();
+        gamePane.gameOver(won);
     }
 
-
-
-
-    
     private void startTimer(){
         	 
         ActionListener taskPerformer = new ActionListener() {
@@ -71,14 +73,15 @@ public class GameController implements CellGuiObserver{
                     soundPlayer.playTickSound();
         	}
         };
-        timer = new Timer(1000, taskPerformer);
+        timer = new Timer(TIMER_INTERVAL, taskPerformer);
         timer.start();
-        gamePane.setTimeDisplayNumber(++secondsPassed);
+        gamePane.setTimeDisplayNumber(++secondsPassed); //Start from value 1.
     }
     
     private void stopTimer(){
         if (timer != null)
             timer.stop();
+        timerOn = false;
     }
 
 
@@ -100,19 +103,17 @@ public class GameController implements CellGuiObserver{
         if (field.getCellInfo(coordinate.x, coordinate.y).hasFlag()) //Ignore if the cell has flag.
             return;
     	
-        List<Coordinate> newlyRevealedCells = field.revealCell(coordinate);
-        gamePane.updateMineField(newlyRevealedCells);
-        if (field.isGameOver()){
-            gameOver();
-            return;
-        }
-    	
-        //System.out.println(field.debugImg());
-    	
         if (!timerOn){
             startTimer();
             timerOn = true;
         }
+        
+        List<Coordinate> newlyRevealedCells = field.revealCell(coordinate);
+        gamePane.updateMineField(newlyRevealedCells);
+        if (field.wasMineHit())
+            gameOver(false);
+        else if (field.isGameWon())
+            gameOver(true);
     }
     
     @Override

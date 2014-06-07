@@ -17,10 +17,12 @@ public class MineField {
     private int cellCount;
     private Map<Coordinate,Cell> cells;
     private List<Cell> mines = new ArrayList<Cell>();
-    private boolean mineHit;
+    private boolean mineHit, gameWon;
     private List<Coordinate> newlyRevealedCells = new ArrayList<Coordinate>();
     private GameInfo gameInfo;
     private int flagsLeft;
+    private int coveredCells;
+    private List<Coordinate> mineCoordinates;
     
     public MineField(int columnCount, int rowCount, int mineCount){
         this.columnCount =columnCount;
@@ -53,6 +55,12 @@ public class MineField {
         for (Cell cell : cells.values())
             countNeighbouringMines(cell);
     	
+        coveredCells = cellCount;
+        
+       mineCoordinates = new ArrayList<Coordinate>();
+        for (Cell c : mines)
+            mineCoordinates.add(c.getCoordinate());
+        
     }
     
     
@@ -70,8 +78,12 @@ public class MineField {
         return rowCount;
     }
     
-    public boolean isGameOver(){
+    public boolean wasMineHit(){
         return mineHit;
+    }
+    
+    public boolean isGameWon(){
+        return gameWon;
     }
     
     public int getLeftFlagsCount(){
@@ -94,18 +106,20 @@ public class MineField {
         if (cell.hasMine()){
             cell.mineWasHit();
             List<Coordinate> mineCoordinates = new ArrayList<Coordinate>();
-            //Fill the coordinate list with mine cells and set all of them as revealed.
-            for (Cell c : mines){
-                mineCoordinates.add(c.getCoordinate());
+            //Reveal all mines
+            for (Cell c : mines)
                 c.reveal();
-        	}
+        	
             mineHit = true; 
-            //The cells to be revealed are the mine cells
             return Collections.unmodifiableList(mineCoordinates);
         }
     	
         uncoverCell(cell);
-    	
+        verifyIfWon();
+        
+        if(gameWon) //If game won, also update the mine cell as we set the flags there.
+            newlyRevealedCells.addAll(mineCoordinates);
+        
         return Collections.unmodifiableList(newlyRevealedCells);
     }
     
@@ -161,7 +175,9 @@ public class MineField {
 //                System.out.print(c.getCoordinate() + " ");
         		
                 String s;
-                if (c.hasMine())
+                if (c.hasFlag())
+                    s ="F";
+                else if (c.hasMine())
                     s = "X";
                 else{
                     if (!c.isRevealed())
@@ -179,6 +195,19 @@ public class MineField {
         		
     	
         return sb.toString();
+    }
+    
+    
+    private void verifyIfWon(){
+        System.out.println("Covered cells " + coveredCells);
+        if (coveredCells > mines.size())
+            return;
+        
+        gameWon = true;
+        //Make the flag set on all mines.
+        for (Cell cell : mines)
+            if (!cell.hasFlag())
+                cell.setHasFlag(true);
     }
     
     /**
@@ -219,7 +248,7 @@ public class MineField {
         cell.reveal();
         cell.setHasQuestionMark(false); //Ensure the question mark is not present after being uncovered.
         newlyRevealedCells.add(cell.getCoordinate()); //Add to the list of revealed cells.
-    	
+    	coveredCells--; //Decrement the total number of covered cells
     	
         if (cell.getNearbyMinesCount() > 0) //Contains mine in neighborhood - do not uncover the neighbors.
             return;
@@ -244,12 +273,12 @@ public class MineField {
     }
     
     public GameInfo getGameInfo(){
-        if (gameInfo == null)
+        if (gameInfo == null) //Initiate lazily
             gameInfo = new GameInfo(){
 
                 @Override
                 public boolean isGameOver() {
-                    return MineField.this.isGameOver();
+                    return MineField.this.wasMineHit();
             	}
 
                 @Override
@@ -271,24 +300,4 @@ public class MineField {
                 return gameInfo;
     }
     
-    
-    /*
-    public static void main(String[] args) throws IOException{
-        MineField field = new MineField(10,10);
-        System.out.println(debugImg(field));
-        boolean end = false;
-    	
-        Scanner scanIn = new Scanner(System.in);
-        while (!end){
-            int x = scanIn.nextInt();
-            int y = scanIn.nextInt();
-        	
-            if ( x < 0)
-                return;
-        	
-            field.revealCell(x, y);
-            System.out.println(debugImg(field));
-        }
-    }
-    */
 }
