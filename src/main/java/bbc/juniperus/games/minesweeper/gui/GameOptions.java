@@ -1,9 +1,9 @@
-package bbc.juniperus.games.minesweeper.gui.swing;
+package bbc.juniperus.games.minesweeper.gui;
 
 public class GameOptions {
     
     public enum Difficulty {
-        EASY(9, 9, 2), MEDIUM(16, 16, 40), HARD(30, 16 , 99);
+        EASY(9, 9, 10), MEDIUM(16, 16, 40), HARD(30, 16 , 99);
     	
         private final int rowCount, columnCount, mineCount;
     	

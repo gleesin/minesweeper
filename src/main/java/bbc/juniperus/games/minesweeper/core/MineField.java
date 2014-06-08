@@ -22,7 +22,7 @@ public class MineField {
     private GameInfo gameInfo;
     private int flagsLeft;
     private int coveredCells;
-    private List<Coordinate> mineCoordinates;
+    private List<Coordinate> mineCoordinates = new ArrayList<>();
     
     public MineField(int columnCount, int rowCount, int mineCount){
         this.columnCount =columnCount;
@@ -34,37 +34,33 @@ public class MineField {
     	
         flagsLeft = mineCount;
     	
-        Set<Integer> mineIndexes = getMineIndexes();
-    	
-        //Create mine field cells.
-        int index =0;
-        for (int row = 0; row < rowCount; row++){
-            for (int col = 0; col < columnCount; col++){
-                Cell cell = new Cell(col,row);
-                //Put mine.
-                if (mineIndexes.contains(index)){
-                    cell.setHasMine(true);
-                    mines.add(cell);
-            	}
-                index++;
-                cells.put(cell.getCoordinate(), cell);
-        	}
-        }
-    	
-        //Count the number of mine-carrying neighbours for each cell
-        for (Cell cell : cells.values())
-            countNeighbouringMines(cell);
-    	
         coveredCells = cellCount;
         
-       mineCoordinates = new ArrayList<Coordinate>();
-        for (Cell c : mines)
-            mineCoordinates.add(c.getCoordinate());
-        
+        for (int row = 0; row < rowCount; row++) {
+            for (int col = 0; col < columnCount; col++) {
+                Cell cell = new Cell(col, row);
+                cells.put(cell.getCoordinate(), cell);
+            }
+        }
     }
     
     
-    
+    public void putMines(Coordinate ignoreCoordinate){
+        Set<Coordinate> coordinates = calculateMineCoordinates(ignoreCoordinate);
+        mineCoordinates.addAll(coordinates);
+        
+        
+        for (Coordinate coordinate : mineCoordinates){
+            Cell cell = cells.get(coordinate);
+            mines.add(cell);
+            cell.setHasMine(true);
+        }
+
+        // Count the number of mine-carrying neighbours for each cell
+        for (Cell cell : cells.values())
+            countNeighbouringMines(cell);
+        
+    }
 
     public CellInfo getCellInfo(int x, int y){
         return getCell(x,y).getCellInfo();
@@ -105,7 +101,6 @@ public class MineField {
 
         if (cell.hasMine()){
             cell.mineWasHit();
-            List<Coordinate> mineCoordinates = new ArrayList<Coordinate>();
             //Reveal all mines
             for (Cell c : mines)
                 c.reveal();
@@ -151,17 +146,31 @@ public class MineField {
     }
     
     
-    private Set<Integer> getMineIndexes(){
-        Set<Integer> mineCells = new HashSet<Integer>(mineCount);
+    private Set<Coordinate> calculateMineCoordinates(Coordinate ignoreCoordinate){
+        
+        
+        
+        Set<Coordinate> coordinates = new HashSet<Coordinate>(mineCount);
         Random random = new Random();
         for (int i = 0; i < mineCount;i++){
             int index = random.nextInt(cellCount);
-            //If the number has been already picked add
+            Coordinate co = indextToCoordinate(index);
+            //If the coordinate has been already picked or should be ignored, add
             //one more iteration.
-            if (!mineCells.add(index))
+            if (co.equals(ignoreCoordinate) || 
+                    !coordinates.add(co)){
                 i--;
+            }
         }
-        return mineCells;
+        
+        return coordinates;
+    }
+    
+    private Coordinate indextToCoordinate(int i){
+        int x = i  % columnCount;
+        int y = (i - x) / columnCount ;
+        
+        return new Coordinate(x,y);
     }
     
     
@@ -171,8 +180,6 @@ public class MineField {
         for (int h = 0; h < getRowCount(); h++){
             for (int w = 0; w < getColumnCount(); w++){
                 Cell c = getCell(w, h);
-        		
-//                System.out.print(c.getCoordinate() + " ");
         		
                 String s;
                 if (c.hasFlag())
@@ -190,7 +197,6 @@ public class MineField {
                 sb.append(" ");
         	}
             sb.append("\n");
-//            System.out.println();
         }
         		
     	
@@ -199,7 +205,6 @@ public class MineField {
     
     
     private void verifyIfWon(){
-        System.out.println("Covered cells " + coveredCells);
         if (coveredCells > mines.size())
             return;
         

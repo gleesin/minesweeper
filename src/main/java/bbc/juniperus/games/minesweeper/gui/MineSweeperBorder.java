@@ -1,4 +1,4 @@
-package bbc.juniperus.games.minesweeper.gui.swing;
+package bbc.juniperus.games.minesweeper.gui;
 
 import java.awt.Color;
 import java.awt.Component;

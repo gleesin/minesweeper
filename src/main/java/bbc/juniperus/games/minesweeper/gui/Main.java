@@ -1,4 +1,4 @@
-package bbc.juniperus.games.minesweeper.gui.swing;
+package bbc.juniperus.games.minesweeper.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -10,6 +10,7 @@ import javax.swing.Action;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultButtonModel;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -18,7 +19,7 @@ import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import bbc.juniperus.games.minesweeper.gui.swing.GameOptions.Difficulty;
+import bbc.juniperus.games.minesweeper.gui.GameOptions.Difficulty;
 
 public class Main {
 
@@ -45,7 +46,7 @@ public class Main {
     private JMenuBar menuBar;
     private GameController gameController;
     private GameOptions options;
-    private JFrame window;
+    private JFrame frame;
     private SoundPlayer soundPlayer;
     private Map<MenuAction, Action> actions = new HashMap<>();
     
@@ -73,7 +74,8 @@ public class Main {
     
     	
         createGame();
-        window.setVisible(true);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
     }
     
     public static void main(String[] args) {
@@ -98,16 +100,16 @@ public class Main {
         actions = createActions();
         menuBar = createMenuBar();
     	
-        window = new JFrame();
-        window.setTitle(TITLE);
-        window.setIconImage(ResourceLoader.getInstance().getApplicationImage());
-        window.setResizable(false);
-        window.setJMenuBar(menuBar);
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame = new JFrame();
+        frame.setTitle(TITLE);
+        frame.setIconImage(ResourceLoader.getInstance().getApplicationImage());
+        frame.setResizable(false);
+        frame.setJMenuBar(menuBar);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //window.setSize(WIDTH, HEIGHT);
     	
-        window.add(gamePane);
-        window.pack();
+        frame.add(gamePane);
+        frame.pack();
     	
         /*
         AudioFormat format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,
@@ -194,7 +196,7 @@ public class Main {
     	
         resultMenuBar.add(gameMenu);
         JMenu helpMenu = new JMenu("Help");
-    	
+        helpMenu.add(new ShowAboutAction());
     	
         resultMenuBar.add(helpMenu);
     	
@@ -223,7 +225,7 @@ public class Main {
         	}
         	
             gameController.startNewGame();
-            window.pack();
+            frame.pack();
         }
     	
     }
@@ -268,6 +270,20 @@ public class Main {
         public void actionPerformed(ActionEvent e) {
             System.out.println("Bye bye!");
             System.exit(0);
+        }
+    }
+    
+    @SuppressWarnings("serial")
+    private class ShowAboutAction extends AbstractAction{
+
+        public ShowAboutAction() {
+            super("About");
+        }
+        
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JDialog dialog = new AboutDialog(frame);
+            dialog.setVisible(true);
         }
     }
 }

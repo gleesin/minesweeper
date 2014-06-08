@@ -1,4 +1,4 @@
-package bbc.juniperus.games.minesweeper.gui.swing;
+package bbc.juniperus.games.minesweeper.gui;
 
 import bbc.juniperus.games.minesweeper.core.Coordinate;
 

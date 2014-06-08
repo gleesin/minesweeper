@@ -1,4 +1,4 @@
-package bbc.juniperus.games.minesweeper.gui.swing;
+package bbc.juniperus.games.minesweeper.gui;
 
 @SuppressWarnings("serial")
 public class ResourceLoadingException extends Exception {

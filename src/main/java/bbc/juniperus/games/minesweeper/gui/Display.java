@@ -1,4 +1,4 @@
-package bbc.juniperus.games.minesweeper.gui.swing;
+package bbc.juniperus.games.minesweeper.gui;
 
 import java.awt.GridLayout;
 
@@ -6,7 +6,7 @@ import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import bbc.juniperus.games.minesweeper.gui.swing.ResourceLoader.ImageSetResource;
+import bbc.juniperus.games.minesweeper.gui.ResourceLoader.ImageSetResource;
 
 @SuppressWarnings("serial")
 public class Display extends JPanel{

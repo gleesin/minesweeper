@@ -1,4 +1,4 @@
-package bbc.juniperus.games.minesweeper.gui.swing;
+package bbc.juniperus.games.minesweeper.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,6 +20,7 @@ public class GameController implements CellGuiObserver{
     private GameOptions options;
     private SoundPlayer soundPlayer;
     private static final int TIMER_INTERVAL = 1000;
+    private boolean minesSet;
 
     public GameController(GameOptions options, GameView gamePane, SoundPlayer soundPlayer){
         this.field = new MineField(options.getColumCount(),options.getRowCount(), options.getMineCount());
@@ -27,8 +28,6 @@ public class GameController implements CellGuiObserver{
         this.options = options;
         assert soundPlayer.isInitialized();
         this.soundPlayer = soundPlayer;
-    	
-        gamePane.newGame(field.getGameInfo(), this);
     	
         gamePane.addFaceButtonListener(new ActionListener(){
 
@@ -38,23 +37,25 @@ public class GameController implements CellGuiObserver{
         	}
         	
         });
+        
+        startNewGame();
     }
     
     
     public void startNewGame(){
+        stopTimer(); //Stop the timer in case it runs from previous game.
         secondsPassed = 0;
+        minesSet = false;
         timerOn = false;
         field = new MineField(options.getColumCount(),options.getRowCount(), options.getMineCount());
         gamePane.newGame(field.getGameInfo(), this);
+        System.out.println(field.getLeftFlagsCount());
         gamePane.setFlagDisplayNumber(field.getLeftFlagsCount());
-        stopTimer();
         gamePane.setTimeDisplayNumber(0);
     }
     
     private void gameOver(boolean won){
-        
         stopTimer();
-        
         if (options.isSound())
             if (won)
                 soundPlayer.playWinSound();
@@ -106,6 +107,11 @@ public class GameController implements CellGuiObserver{
         if (!timerOn){
             startTimer();
             timerOn = true;
+        }
+        
+        if (!minesSet){
+            field.putMines(coordinate);
+            minesSet = true;
         }
         
         List<Coordinate> newlyRevealedCells = field.revealCell(coordinate);

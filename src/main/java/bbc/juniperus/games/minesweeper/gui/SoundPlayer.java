@@ -1,4 +1,4 @@
-package bbc.juniperus.games.minesweeper.gui.swing;
+package bbc.juniperus.games.minesweeper.gui;
 
 import java.io.IOException;
 import java.net.URL;
@@ -8,7 +8,7 @@ import javax.media.NoPlayerException;
 import javax.media.Player;
 import javax.media.Time;
 
-import bbc.juniperus.games.minesweeper.gui.swing.ResourceLoader.SoundResource;
+import bbc.juniperus.games.minesweeper.gui.ResourceLoader.SoundResource;
 
 public class SoundPlayer {
     

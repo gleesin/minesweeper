@@ -1,4 +1,4 @@
-package bbc.juniperus.games.minesweeper.gui.swing;
+package bbc.juniperus.games.minesweeper.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -16,8 +16,8 @@ import javax.swing.border.Border;
 
 import bbc.juniperus.games.minesweeper.core.CellInfo;
 import bbc.juniperus.games.minesweeper.core.Coordinate;
-import bbc.juniperus.games.minesweeper.gui.swing.ResourceLoader.ImageResource;
-import bbc.juniperus.games.minesweeper.gui.swing.ResourceLoader.ImageSetResource;
+import bbc.juniperus.games.minesweeper.gui.ResourceLoader.ImageResource;
+import bbc.juniperus.games.minesweeper.gui.ResourceLoader.ImageSetResource;
 
 @SuppressWarnings("serial")
 public class CellView extends JPanel {
