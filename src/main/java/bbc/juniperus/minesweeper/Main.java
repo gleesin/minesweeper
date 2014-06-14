@@ -1,4 +1,5 @@
-package bbc.juniperus.games.minesweeper.gui;
+package bbc.juniperus.minesweeper;
+
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -19,7 +20,14 @@ import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import bbc.juniperus.games.minesweeper.gui.GameOptions.Difficulty;
+import bbc.juniperus.minesweeper.gui.AboutDialog;
+import bbc.juniperus.minesweeper.gui.GameController;
+import bbc.juniperus.minesweeper.gui.GameOptions;
+import bbc.juniperus.minesweeper.gui.GameOptions.Difficulty;
+import bbc.juniperus.minesweeper.gui.GameView;
+import bbc.juniperus.minesweeper.gui.ResourceLoader;
+import bbc.juniperus.minesweeper.gui.ResourceLoadingException;
+import bbc.juniperus.minesweeper.gui.SoundPlayer;
 
 public class Main {
 
@@ -56,7 +64,6 @@ public class Main {
     	
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-            //UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | InstantiationException
                 | IllegalAccessException | UnsupportedLookAndFeelException e1) {
             // TODO Auto-generated catch block

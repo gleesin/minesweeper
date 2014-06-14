@@ -1,4 +1,4 @@
-package bbc.juniperus.games.minesweeper.gui;
+package bbc.juniperus.minesweeper.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,9 +6,9 @@ import java.util.List;
 
 import javax.swing.Timer;
 
-import bbc.juniperus.games.minesweeper.core.CellInfo;
-import bbc.juniperus.games.minesweeper.core.Coordinate;
-import bbc.juniperus.games.minesweeper.core.MineField;
+import bbc.juniperus.minesweeper.core.CellInfo;
+import bbc.juniperus.minesweeper.core.Coordinate;
+import bbc.juniperus.minesweeper.core.MineField;
 
 public class GameController implements CellGuiObserver{
 
@@ -49,7 +49,6 @@ public class GameController implements CellGuiObserver{
         timerOn = false;
         field = new MineField(options.getColumCount(),options.getRowCount(), options.getMineCount());
         gamePane.newGame(field.getGameInfo(), this);
-        System.out.println(field.getLeftFlagsCount());
         gamePane.setFlagDisplayNumber(field.getLeftFlagsCount());
         gamePane.setTimeDisplayNumber(0);
     }

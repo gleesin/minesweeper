@@ -1,4 +1,4 @@
-package bbc.juniperus.games.minesweeper.gui;
+package bbc.juniperus.minesweeper.gui;
 
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
@@ -9,7 +9,7 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.border.Border;
 
-import bbc.juniperus.games.minesweeper.gui.ResourceLoader.ImageSetResource;
+import bbc.juniperus.minesweeper.gui.ResourceLoader.ImageSetResource;
 
 
 @SuppressWarnings("serial")

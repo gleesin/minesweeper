@@ -1,4 +1,4 @@
-package bbc.juniperus.games.minesweeper.gui;
+package bbc.juniperus.minesweeper.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -9,9 +9,9 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-import bbc.juniperus.games.minesweeper.core.Coordinate;
-import bbc.juniperus.games.minesweeper.core.GameInfo;
-import bbc.juniperus.games.minesweeper.gui.FaceButton.Face;
+import bbc.juniperus.minesweeper.core.Coordinate;
+import bbc.juniperus.minesweeper.core.GameInfo;
+import bbc.juniperus.minesweeper.gui.FaceButton.Face;
 
 @SuppressWarnings("serial")
 public class GameView extends JPanel{

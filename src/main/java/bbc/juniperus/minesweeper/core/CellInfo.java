@@ -1,4 +1,4 @@
-package bbc.juniperus.games.minesweeper.core;
+package bbc.juniperus.minesweeper.core;
 
 /*
  * The interface for view object of {@link Cell}.

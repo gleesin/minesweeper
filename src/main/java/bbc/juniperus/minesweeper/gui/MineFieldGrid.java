@@ -1,4 +1,4 @@
-package bbc.juniperus.games.minesweeper.gui;
+package bbc.juniperus.minesweeper.gui;
 
 import java.awt.Component;
 import java.awt.GridLayout;
@@ -12,10 +12,10 @@ import java.util.Map;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-import bbc.juniperus.games.minesweeper.core.CellInfo;
-import bbc.juniperus.games.minesweeper.core.Coordinate;
-import bbc.juniperus.games.minesweeper.core.GameInfo;
-import bbc.juniperus.games.minesweeper.gui.FaceButton.Face;
+import bbc.juniperus.minesweeper.core.CellInfo;
+import bbc.juniperus.minesweeper.core.Coordinate;
+import bbc.juniperus.minesweeper.core.GameInfo;
+import bbc.juniperus.minesweeper.gui.FaceButton.Face;
 
 public class MineFieldGrid extends JPanel{
 

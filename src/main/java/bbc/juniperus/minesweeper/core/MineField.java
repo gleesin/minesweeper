@@ -1,4 +1,4 @@
-package bbc.juniperus.games.minesweeper.core;
+package bbc.juniperus.minesweeper.core;
 
 import java.util.ArrayList;
 import java.util.Collections;
