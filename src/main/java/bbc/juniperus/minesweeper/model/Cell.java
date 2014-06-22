@@ -1,4 +1,4 @@
-package bbc.juniperus.minesweeper.core;
+package bbc.juniperus.minesweeper.model;
 
 
 class Cell {

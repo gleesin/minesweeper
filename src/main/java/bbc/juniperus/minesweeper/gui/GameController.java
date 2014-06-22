@@ -6,9 +6,9 @@ import java.util.List;
 
 import javax.swing.Timer;
 
-import bbc.juniperus.minesweeper.core.CellInfo;
-import bbc.juniperus.minesweeper.core.Coordinate;
-import bbc.juniperus.minesweeper.core.MineField;
+import bbc.juniperus.minesweeper.model.CellInfo;
+import bbc.juniperus.minesweeper.model.Coordinate;
+import bbc.juniperus.minesweeper.model.MineField;
 
 public class GameController implements CellGuiObserver{
 

@@ -1,6 +1,6 @@
 package bbc.juniperus.minesweeper.gui;
 
-import bbc.juniperus.minesweeper.core.Coordinate;
+import bbc.juniperus.minesweeper.model.Coordinate;
 
 
 /**
