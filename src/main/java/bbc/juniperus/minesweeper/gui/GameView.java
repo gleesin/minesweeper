@@ -13,9 +13,15 @@ import bbc.juniperus.minesweeper.gui.FaceButton.Face;
 import bbc.juniperus.minesweeper.model.Coordinate;
 import bbc.juniperus.minesweeper.model.GameInfo;
 
+/**
+ * A game view. Contains also some presentation logic. It should be the only interface for interacting
+ * with view objects. The whole game view consists of displays, button, and game grid with cell views.
+ *
+ */
 @SuppressWarnings("serial")
 public class GameView extends JPanel{
 
+    /* Definition of look and style */
     static final Color DARK_COLOR = new Color(128, 128, 128);
     static final Color MAIN_COLOR = new Color(192, 192, 192);
     static final Color LIGHT_COLOR = Color.white;
@@ -25,57 +31,94 @@ public class GameView extends JPanel{
     private static final Border INSIDE_BORDER = BorderFactory.createLineBorder(MAIN_COLOR,5);
     private static final Border BORDER = BorderFactory.createCompoundBorder(OUTSIDE_BORDER, INSIDE_BORDER);
     
-    private DisplayPane upperPane;
-    private MineFieldGrid mineFieldPane;
+    private DisplayPane displayPane;
+    private MineFieldGrid mineFieldGrid;
     
-    
+   /** 
+    * Constructs a game view. 
+    */
     public GameView() {
         super(new BorderLayout());
         setBackground(MAIN_COLOR);
         setBorder(BORDER);
         
-        mineFieldPane = new MineFieldGrid(this);
-        add(mineFieldPane);
+        mineFieldGrid = new MineFieldGrid(this);
+        add(mineFieldGrid);
         
-        upperPane = new DisplayPane();
+        displayPane = new DisplayPane();
     
-        add(upperPane, BorderLayout.NORTH);
+        add(displayPane, BorderLayout.NORTH);
     }
-    
+   
+    /**
+     * Sets the game view to a 'new-game' state. 
+     * @param gameInfo information about the new game
+     * @param controller game conroller
+     */
     public void newGame(GameInfo gameInfo, GameController controller){
-        mineFieldPane.removeAll();
-        mineFieldPane.newGame(gameInfo, controller);
-        upperPane.getFaceButton().reset();
+        mineFieldGrid.removeAll();
+        mineFieldGrid.newGame(gameInfo, controller);
+        displayPane.getFaceButton().reset();
         repaint();
     }
     
+    /**
+     * Updates cells views for cells with given coordinates.
+     * @param coordinates cell coordinates
+     */
     public void updateMineField(List<Coordinate> coordinates){
-        mineFieldPane.update(coordinates);
+        mineFieldGrid.update(coordinates);
     }
     
+    /**
+     * Updates a cell view for a cell with a given coordinate.
+     * @param coordinate cell coordinate
+     */
     public void updateMineField(Coordinate coordinate){
-        mineFieldPane.update(coordinate);
+        mineFieldGrid.update(coordinate);
     }
     
+    
+    /**
+     * Sets the flag display to display given value.
+     * @param number the number of flags to be displayed
+     */
     public void setFlagDisplayNumber(int number){
-        upperPane.getFlagDisplay().setNumber(number);
+        displayPane.getFlagDisplay().setNumber(number);
     }
     
+    /**
+     * Sets the time display to display given time.
+     * @param number the seconds passed
+     */
     public void setTimeDisplayNumber(int number){
-        upperPane.getTimeDisplay().setNumber(number);
+        displayPane.getTimeDisplay().setNumber(number);
     }
     
+    /**
+     * Sets the face type for the game button
+     * @param face face type which should be displayed
+     */
     public void setFace(Face face){
-        upperPane.getFaceButton().setFace(face);
+        displayPane.getFaceButton().setFace(face);
     }
-    
+   
+    /**
+     * Adds listener/observer for the face button.
+     * @param listener face button listener
+     */
     public void addFaceButtonListener(ActionListener listener){
-        upperPane.getFaceButton().addActionListener(listener);
+        displayPane.getFaceButton().addActionListener(listener);
     }
-    
+   
+    /**
+     * Updates the view to reflect 'gave-over' state and based on
+     * whether the game was won or lost.
+     * @param won <code>true</code> if the game was lost, <code>false</code> if otherwise
+     */
     public void gameOver(boolean won){
         Face face = won? Face.VICTORIOUS : Face.DEAD;
-        upperPane.getFaceButton().setFace(face);
-        mineFieldPane.gameOver(won);
+        displayPane.getFaceButton().setFace(face);
+        mineFieldGrid.gameOver(won);
     }
 }

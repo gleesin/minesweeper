@@ -10,6 +10,11 @@ import bbc.juniperus.minesweeper.model.CellInfo;
 import bbc.juniperus.minesweeper.model.Coordinate;
 import bbc.juniperus.minesweeper.model.MineField;
 
+/**
+ * A controller of the game logic. A mediator between {@link MineField}
+ * and {@link GameView}. Some presentation logic is also part of the game view.
+ *
+ */
 public class GameController implements CellGuiObserver{
 
     private MineField field; 
@@ -22,14 +27,20 @@ public class GameController implements CellGuiObserver{
     private static final int TIMER_INTERVAL = 1000;
     private boolean minesSet;
 
-    public GameController(GameOptions options, GameView gamePane, SoundPlayer soundPlayer){
+    /**
+     * Constructs a controller.
+     * @param options game options
+     * @param gameView game view
+     * @param soundPlayer sound player
+     */
+    public GameController(GameOptions options, GameView gameView, SoundPlayer soundPlayer){
         this.field = new MineField(options.getColumCount(),options.getRowCount(), options.getMineCount());
-        this.gamePane = gamePane;
+        this.gamePane = gameView;
         this.options = options;
         assert soundPlayer.isInitialized();
         this.soundPlayer = soundPlayer;
     	
-        gamePane.addFaceButtonListener(new ActionListener(){
+        gameView.addFaceButtonListener(new ActionListener(){
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -41,7 +52,9 @@ public class GameController implements CellGuiObserver{
         startNewGame();
     }
     
-    
+    /**
+     * Starts a new game. The whole game state including timer and flag counter is reset.
+     */
     public void startNewGame(){
         stopTimer(); //Stop the timer in case it runs from previous game.
         secondsPassed = 0;
@@ -53,6 +66,11 @@ public class GameController implements CellGuiObserver{
         gamePane.setTimeDisplayNumber(0);
     }
     
+    /**
+     * Undertakes the necessary action after the game has ended based on whether
+     * the game was won or lost.
+     * @param won <code>true</code> if game was won, <code>false</code> if lost
+     */
     private void gameOver(boolean won){
         stopTimer();
         if (options.isSound())
@@ -62,7 +80,10 @@ public class GameController implements CellGuiObserver{
                 soundPlayer.playExplosionSound();
         gamePane.gameOver(won);
     }
-
+    
+    /**
+     * Starts the game timer.
+     */
     private void startTimer(){
         	 
         ActionListener taskPerformer = new ActionListener() {
@@ -78,6 +99,9 @@ public class GameController implements CellGuiObserver{
         gamePane.setTimeDisplayNumber(++secondsPassed); //Start from value 1.
     }
     
+    /**
+     * Stops the game timer,
+     */
     private void stopTimer(){
         if (timer != null)
             timer.stop();
@@ -85,17 +109,24 @@ public class GameController implements CellGuiObserver{
     }
 
 
-
+    /**
+     * Sets the flag for a cell with a given coordinate and
+     * updates flag counter display.
+     */
     private void setFlag(Coordinate coordinate){
         int flagCount = field.setFlag(coordinate, true);
         gamePane.setFlagDisplayNumber(flagCount);
     }
+
     
+    /**
+     * Removes the flag from a cell with a given coordinate and
+     * updates flag counter display.
+     */
     private void removeFlag(Coordinate coordinate){
         int flagCount = field.setFlag(coordinate, false);
         gamePane.setFlagDisplayNumber(flagCount);
     }
-
 
     @Override
     public void leftButtonActivated(Coordinate coordinate) {

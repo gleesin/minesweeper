@@ -17,16 +17,24 @@ import bbc.juniperus.minesweeper.model.CellInfo;
 import bbc.juniperus.minesweeper.model.Coordinate;
 import bbc.juniperus.minesweeper.model.GameInfo;
 
-public class MineFieldGrid extends JPanel{
-
-    private static final long serialVersionUID = 1L;
+/**
+ * A component which displays the mine-field cell grid.
+ * As {@link GameView}, also contains some presentation logic. 
+ * 
+ * see@ {@link CellView}
+ */
+@SuppressWarnings("serial")
+class MineFieldGrid extends JPanel{
 
     private Map<Coordinate,CellView> cells = new HashMap<Coordinate,CellView>();
     private static final Border BORDER = new MineSweeperBorder(3,GameView.DARK_COLOR, GameView.LIGHT_COLOR); 
     private boolean ignoreMouseEvent;
     private GameView gameView;
     
-    
+    /**
+     * Constructs a mine field grid.
+     * @param gameView game view
+     */
     MineFieldGrid(GameView gameView){
         MouseAdapter listener = new TheMouseListener();
         this.gameView = gameView;
@@ -34,7 +42,13 @@ public class MineFieldGrid extends JPanel{
         addMouseMotionListener(listener);
     }
     
-    public void newGame(GameInfo gameInfo, GameController controller){
+    
+    /**
+     * Sets this cell grid to the 'new-game' state according to the
+     * new  game information.
+     * @param gameInfo game information
+     */
+    void newGame(GameInfo gameInfo, GameController controller){
         setLayout(new GridLayout(gameInfo.getRowCount(),gameInfo.getColumnCount()));
         setBorder(BORDER);
         ignoreMouseEvent = false;
@@ -51,7 +65,11 @@ public class MineFieldGrid extends JPanel{
     
     }
 
-    public void update(List<Coordinate> coordinates) {
+    /**
+     * Updates cell view for cells with given coordinates.
+     * @param coordinates coordinates of the cells which views should be updated
+     */
+    void update(List<Coordinate> coordinates) {
         //Update relevant cell gui's according to the model.
         //This will also mark them for repainting by this container.
         for (Coordinate c : coordinates)
@@ -60,16 +78,29 @@ public class MineFieldGrid extends JPanel{
         repaint();
     }
     
-    public void update(Coordinate coordinate) {
+    /**
+     * Updates a cell view for a cell with a given coordinate.
+     * @param coordinate coordinate of the cell which view should be updated
+     */
+    void update(Coordinate coordinate) {
         cells.get(coordinate).update(); 
         repaint();
     }
-    
-    public void gameOver(boolean won){
+   /**
+    * Sets this mine-field grid to 'game-over' state and based
+    * on whether the game  has been won or lost. 
+    * @param won <code>true</code> if the game was won, <code>false</code> if the game was lost 
+    */
+    void gameOver(boolean won){
         ignoreMouseEvent = true;
     }
     
-    
+   /**
+    * Inner mouse listener. Manages cell views and their pressed/not-pressed/clicked states
+    * based on mouse events received from the mine-field grid and in a way that copies the original
+    * Windows XP Minesweeper game.
+    *
+    */
     private class TheMouseListener extends MouseAdapter{
     	
         private CellView pressedCell;
@@ -109,12 +140,12 @@ public class MineFieldGrid extends JPanel{
         	}
         }
 
-        /**
-         * Sets the pressed look if the cell has not been already revelaed
-         * and if the click comes from left mouse button.
-         */
         @Override
         public void mousePressed(MouseEvent e) {
+            /**
+             * Sets the pressed look if the cell has not been already revealed
+             * and if the click comes from left mouse button.
+             */
             if (ignoreMouseEvent)
                 return;
         	
@@ -171,7 +202,11 @@ public class MineFieldGrid extends JPanel{
         	}
         }
     	
-    	
+    	/**
+    	 * Sets pressed look for a cell view on a give coordinate
+    	 * and to all its adjacent cell views.
+    	 * @param co
+    	 */
         private void pressGroup(Coordinate co){
             assert pressedCells.size() == 0;
         	
@@ -186,12 +221,18 @@ public class MineFieldGrid extends JPanel{
                 c.mousePressed(MouseEvent.BUTTON2);
         }
     	
+        /**
+         * Cancels induced pressed look by {@link #pressGroup(Coordinate)}
+         */
         private void unpressGroup(){
             for (CellView c : pressedCells)
                 c.unpressMouse();
             pressedCells.clear();
         }
     	
+        /**
+         * Determines on which cell view the mouse event was generated.
+         */
         private CellView getCell(MouseEvent e){
             Component c = getComponentAt(e.getPoint());
         	
