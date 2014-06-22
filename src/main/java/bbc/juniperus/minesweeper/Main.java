@@ -29,9 +29,16 @@ import bbc.juniperus.minesweeper.gui.ResourceLoader;
 import bbc.juniperus.minesweeper.gui.ResourceLoadingException;
 import bbc.juniperus.minesweeper.gui.SoundPlayer;
 
+
+/**
+ * Entry class of the application.
+ * Contains also inner action classes.
+ */
 public class Main {
 
-    
+    /**
+     * Menu actions enum.
+     */
     enum MenuAction {
         NEW_GAME("New game"), BEGINNER("Beginner"), 
         INTERMEDIATE("Intermediate"), EXPERT("Expert"), 
@@ -58,10 +65,13 @@ public class Main {
     private SoundPlayer soundPlayer;
     private Map<MenuAction, Action> actions = new HashMap<>();
     
+    
+    /**
+     * Default constructor.
+     */
     public Main(){
     	
-        System.out.println(UIManager.getSystemLookAndFeelClassName());
-    	
+        //TODO review it
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
         } catch (ClassNotFoundException | InstantiationException
@@ -70,14 +80,11 @@ public class Main {
             e1.printStackTrace();
         	
         }
-    	
-        System.out.println("constructing");
         try {
             ResourceLoader.getInstance().initialize();
         } catch (ResourceLoadingException e) {
             e.printStackTrace();
         }
-    	
     
     	
         createGame();
@@ -90,7 +97,9 @@ public class Main {
     }
     
 
-    
+   /**
+    * Constructs the fundamental game objects and game view. 
+    */
     private void createGame(){
     	
         options = new GameOptions();
@@ -117,17 +126,12 @@ public class Main {
     	
         frame.add(gamePane);
         frame.pack();
-    	
-        /*
-        AudioFormat format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,
-                AudioSystem.NOT_SPECIFIED,
-                16, 2, 4,
-                AudioSystem.NOT_SPECIFIED, true);
-        */
-    	
     }
     
-    
+   /**
+    * Creates all menu actions. 
+    * @return menu action map
+    */
     private Map<MenuAction, Action> createActions(){
         Map<MenuAction, Action> result = new HashMap<>();
     	
@@ -138,14 +142,19 @@ public class Main {
         result.put(MenuAction.BEGINNER, new NewGameAction(MenuAction.BEGINNER.getName(), Difficulty.EASY));
         result.put(MenuAction.INTERMEDIATE, new NewGameAction(MenuAction.INTERMEDIATE.getName(), Difficulty.MEDIUM));
         result.put(MenuAction.EXPERT, new NewGameAction(MenuAction.EXPERT.getName(), Difficulty.HARD));
-        result.put(MenuAction.QUESTION_MARKS, new SetQuestionMarksAction(MenuAction.QUESTION_MARKS.getName()));
-        result.put(MenuAction.SOUND, new SetSoundAction(MenuAction.SOUND.getName()));
+        result.put(MenuAction.QUESTION_MARKS, new ToggleQuestionMarksAction(MenuAction.QUESTION_MARKS.getName()));
+        result.put(MenuAction.SOUND, new ToggleSoundAction(MenuAction.SOUND.getName()));
         result.put(MenuAction.EXIT, new ExitGameAction(MenuAction.EXIT.getName()));
     	
     	
         return result;
     }
     
+
+    /**
+     * Creates game view menu bar
+     * @return create menu bar
+     */
     @SuppressWarnings("serial")
     private JMenuBar createMenuBar(){
         JMenuBar resultMenuBar = new JMenuBar();
@@ -210,6 +219,9 @@ public class Main {
         return resultMenuBar;
     }
     
+    /**
+     * An action which starts a new game.
+     */
     @SuppressWarnings("serial")
     private class NewGameAction extends AbstractAction{
 
@@ -236,11 +248,15 @@ public class Main {
         }
     	
     }
-    
-    @SuppressWarnings("serial")
-    private class SetQuestionMarksAction extends AbstractAction{
 
-        public SetQuestionMarksAction(String name) {
+   /**
+    * An action which either turns off or on the question mark feature of the game
+    * based on whether this feature is on or off.
+    */
+    @SuppressWarnings("serial")
+    private class ToggleQuestionMarksAction extends AbstractAction{
+
+        public ToggleQuestionMarksAction(String name) {
             super(name);
         }
     	
@@ -251,10 +267,14 @@ public class Main {
     }
     
     
+    /**
+     * An action which either turns on or off the game sound based
+     * whether the sound is off or on.
+     */
     @SuppressWarnings("serial")
-    private class SetSoundAction extends AbstractAction{
+    private class ToggleSoundAction extends AbstractAction{
 
-        public SetSoundAction(String name) {
+        public ToggleSoundAction(String name) {
             super(name);
         }
     	
@@ -266,6 +286,9 @@ public class Main {
     
     
     
+    /**
+     * An action which terminates the execution of the application.
+     */
     @SuppressWarnings("serial")
     private class ExitGameAction extends AbstractAction{
 
@@ -279,7 +302,11 @@ public class Main {
             System.exit(0);
         }
     }
-    
+   
+    /**
+     * An action which shows the 'about' pop-up window with informations
+     * about the application and author.
+     */
     @SuppressWarnings("serial")
     private class ShowAboutAction extends AbstractAction{
 

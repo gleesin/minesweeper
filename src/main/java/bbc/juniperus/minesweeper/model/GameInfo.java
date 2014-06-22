@@ -7,14 +7,14 @@ package bbc.juniperus.minesweeper.model;
 public interface GameInfo {
 
     /**
-     * Returns the number of the rows of the mine-field
-     * @return the number of the rows of the mine-field
+     * Returns the number of  rows of the mine-field
+     * @return the number of  rows of the mine-field
      */
 	int getRowCount();
 
     /**
-     * Returns the number of the columns of the mine-field
-     * @return the number of the columns of the mine-field
+     * Returns the number of  columns of the mine-field
+     * @return the number of  columns of the mine-field
      */
 	int getColumnCount();
 	

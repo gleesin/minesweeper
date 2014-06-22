@@ -1,7 +1,5 @@
 package bbc.juniperus.minesweeper.model;
 
-import java.awt.Component;
-import java.awt.Point;
 
 
 /**
@@ -15,9 +13,6 @@ public class Coordinate {
     public Coordinate(int x, int y){
         this.x =x;
         this.y =y;
-        
-        
-        Point p;
     }
     
     
@@ -43,7 +38,10 @@ public class Coordinate {
         return (x == c.x && y == c.y);
     }
     
-    
+    /*
+ 
+     * @see java.lang.Object#hashCode()
+     */
     @Override
     public int hashCode(){
         return y*11+y*7;
@@ -52,6 +50,7 @@ public class Coordinate {
     
     /**
      * Custom string representation of coordinate.
+     * @see java.lang.Object#toString()
      */
     @Override
     public String toString(){

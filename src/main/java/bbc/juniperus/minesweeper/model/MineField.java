@@ -241,7 +241,7 @@ public class MineField {
      * @param hasQuestionmark <code>true</code> if question mark should be added, <code>false</code> if it should be removed
      */
     public void setQuestionMark(Coordinate coordinate, boolean hasQuestionmark){
-        cells.get(coordinate).setHasQuestionMark(hasQuestionmark);
+        cells.get(coordinate).setQuestionMark(hasQuestionmark);
     }
     
     /**
@@ -368,7 +368,7 @@ public class MineField {
             return;
     	
         cell.reveal();
-        cell.setHasQuestionMark(false); //Ensure the question mark is not present after being uncovered.
+        cell.setQuestionMark(false); //Ensure the question mark is not present after being uncovered.
         newlyRevealedCells.add(cell.getCoordinate()); //Add to the list of revealed cells.
     	coveredCells--; //Decrement the total number of covered cells
     	
