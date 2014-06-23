@@ -7,6 +7,10 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
+/**
+ * A pane which aggregates flag counter display, minesweeper face button
+ * and time display components.
+ */
 @SuppressWarnings("serial")
 public class DisplayPane extends JPanel{
     
@@ -51,15 +55,26 @@ public class DisplayPane extends JPanel{
         return new Dimension(0, HEIGHT);
     }
 
-    
+    /**
+     * Returns the face button of this display pane.
+     * @return face button
+     */
     public FaceButton getFaceButton(){
         return button;
     }
     
+    /**
+     * Returns the flag counter display of this display pane.
+     * @return flag display
+     */
     public Display getFlagDisplay(){
         return flagDisplay;
     }
     
+    /**
+     * Returns the time display of this display pane.
+     * @return time display
+     */
     public Display getTimeDisplay(){
         return timeDisplay;
     }

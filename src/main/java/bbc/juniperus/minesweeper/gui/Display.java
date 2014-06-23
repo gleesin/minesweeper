@@ -8,12 +8,22 @@ import javax.swing.JPanel;
 
 import bbc.juniperus.minesweeper.gui.ResourceLoader.ImageSetResource;
 
+/**
+ * A Swing display  which shows a 3 digit number.
+ * The display copies the Windows XP Minesweeper display look. 
+ * @see Display
+ * @see FaceButton
+ */
 @SuppressWarnings("serial")
 public class Display extends JPanel{
 
     private static final int DIGIT_COUNT = 3;
     private JLabel[] labels = new JLabel[DIGIT_COUNT];
     private Icon[] numbers = ResourceLoader.getInstance().createIconSet(ImageSetResource.DISPLAY_NUMBERS,13);
+    
+    /**
+     * Constructs a new display.
+     */
     public Display(){
         GridLayout layout = new GridLayout(1,DIGIT_COUNT);
         setLayout(layout);
@@ -26,6 +36,10 @@ public class Display extends JPanel{
         setNumber(0);
     }
     
+    /**
+     * Sets this display to start showing a given number value.
+     * @param number number to be displayed
+     */
     public void setNumber(int number){
     	
         int max  = (int)Math.pow(10, DIGIT_COUNT)-1;
@@ -46,7 +60,10 @@ public class Display extends JPanel{
         revalidate();
         repaint();
     }
-    
+   
+    /**
+     * Converts an integer to an integer array representing the number's digits.
+     */
     private int[] getDigitArray(int number){
         int[] digits = new int[DIGIT_COUNT];
     	

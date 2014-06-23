@@ -18,8 +18,11 @@ import bbc.juniperus.minesweeper.model.Coordinate;
 import bbc.juniperus.minesweeper.model.GameInfo;
 
 /**
- * A component which displays the mine-field cell grid.
+ * A component which displays the mine-field cell grid. It consists
+ * of grid of {@link CellView} objects.
  * As {@link GameView}, also contains some presentation logic. 
+ * The grid also handles mouse events centrally 
+ * and propagates them to relevant cell views.
  * 
  * see@ {@link CellView}
  */
@@ -73,7 +76,7 @@ class MineFieldGrid extends JPanel{
         //Update relevant cell gui's according to the model.
         //This will also mark them for repainting by this container.
         for (Coordinate c : coordinates)
-            cells.get(c).update(); 
+            cells.get(c).updateLook(); 
         	
         repaint();
     }
@@ -83,7 +86,7 @@ class MineFieldGrid extends JPanel{
      * @param coordinate coordinate of the cell which view should be updated
      */
     void update(Coordinate coordinate) {
-        cells.get(coordinate).update(); 
+        cells.get(coordinate).updateLook(); 
         repaint();
     }
    /**
@@ -96,7 +99,11 @@ class MineFieldGrid extends JPanel{
     }
     
    /**
-    * Inner mouse listener. Manages cell views and their pressed/not-pressed/clicked states
+    * Inner mouse listener. Rather than listening for mouse event on cell view level, the mouse
+    * events are handled by mine-field grid and propagated to the relevant cell view or group
+    * of cell views which in turn fire some of these events to registered listeners.
+    * 
+    * This mouse listener manages cell views and their pressed/not-pressed/clicked states
     * based on mouse events received from the mine-field grid and in a way that copies the original
     * Windows XP Minesweeper game.
     *

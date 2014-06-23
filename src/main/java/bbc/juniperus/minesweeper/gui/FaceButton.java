@@ -11,7 +11,10 @@ import javax.swing.border.Border;
 
 import bbc.juniperus.minesweeper.gui.ResourceLoader.ImageSetResource;
 
-
+/**
+ * A minesweeper button with a face on it which 
+ * changes to reflect various states of the game.
+ */
 @SuppressWarnings("serial")
 public class FaceButton extends JButton{
 
@@ -24,12 +27,14 @@ public class FaceButton extends JButton{
     
     private static final Icon[] faceIcons = ResourceLoader.getInstance().createIconSet(ImageSetResource.FACES, 17);
     
-    
     //Need to keep the enum order as it is! Determines icon from icon array. (Lazy, not ideal, solution).
     public enum Face {NORMAL, SUSPENDED, DEAD, VICTORIOUS}; 
     
     private Face face,previousFace;
     
+    /**
+     * Constructs a new face button.
+     */
     public FaceButton() {
         setBorder(BORDER);
         setBackground(GameView.MAIN_COLOR);
@@ -59,11 +64,18 @@ public class FaceButton extends JButton{
         setFace(Face.NORMAL);
     }
     
+    /**
+     * Sets the default - {@link Face#NORMAL} state of this button.
+     */
     public void reset(){
         setFace(Face.NORMAL);
         previousFace = Face.NORMAL;
     }
-    
+   
+    /**
+     * Sets this button to display a given face type.
+     * @param face face to be set
+     */
     public void setFace(Face face){
         setIcon(faceIcons[face.ordinal()]);
         this.face = face;

@@ -7,11 +7,22 @@ import java.awt.Insets;
 
 import javax.swing.border.Border;
 
+/**
+ * A custom implementation of border used in the game view components
+ * copying the Windows XP Minesweeper look.
+ */
 public class MineSweeperBorder implements Border{
 
     private int borderWidth;
     private Color topLeftColor,bottomRightColor;
 
+    
+    /**
+     * 
+     * @param width
+     * @param topLeft
+     * @param bottomRight
+     */
     public MineSweeperBorder(int width, Color topLeft, Color bottomRight){
         borderWidth = width;
         topLeftColor = topLeft;

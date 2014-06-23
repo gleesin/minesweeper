@@ -19,6 +19,20 @@ import bbc.juniperus.minesweeper.gui.ResourceLoader.ImageSetResource;
 import bbc.juniperus.minesweeper.model.CellInfo;
 import bbc.juniperus.minesweeper.model.Coordinate;
 
+/**
+ * A Swing component view for a mine-field cell in style of Windows XP Minesweeper.
+ * The view can have several states
+ * like default, pressed, revealed etc. The cell view also contains
+ * a presentation logic of how to respond to various mouse events.
+ * The view is notified about mouse events from the parent component 
+ * which it is part of (as this  sometimes require synchronize 
+ * behavior of multiple cell view) and therefore no regular Swing mouse listeners are 
+ * added to this component.
+ * 
+ * <br><br> 
+ * All information about cell is accessed via {@link CellInfo}.
+ *
+ */
 @SuppressWarnings("serial")
 public class CellView extends JPanel {
 
@@ -48,6 +62,10 @@ public class CellView extends JPanel {
     private Set<CellViewObserver> listeners = new HashSet<CellViewObserver>();
     private boolean isPressed;
     
+    /**
+     * Constructs a cell view based on a given cell information.
+     * @param cellInfo
+     */
     public CellView(final CellInfo  cellInfo){
         super(new BorderLayout());
         setBackground(colorBackground);
@@ -62,7 +80,12 @@ public class CellView extends JPanel {
     }
     
     
-
+    /**
+     * Sets this view to pressed state for a given mouse button.
+     * Based on the mouse button and the view's state an event
+     * might be fired to registered {@link CellViewObserver} objects.
+     * @param button mouse button type
+     */
     void mousePressed(int button){
         if (isRevealed) 
             return;
@@ -77,8 +100,12 @@ public class CellView extends JPanel {
     }
     
     /**
-     * {@link MouseEvent#BUTTON1} (left mouse button) has been released when the mouse cursor
-     * was over this component (and it was pressed).
+     * Invoked when the right mouse button has been released on top of this
+     * cell view (simply a click event). It is assumed that the view is in pressed state when this method is invoked.
+     *
+     * If the cell view is not revealed or does not contain flag, the left mouse button
+     * activate action is fired to all registered @link CellViewObserver} objects.
+     * 
      */
     void mouseReleased(){
         if (isRevealed || cellInfo.hasFlag())
@@ -90,14 +117,20 @@ public class CellView extends JPanel {
     }
     
     /**
-     * Cancels the pressed state without the release of the mouse button.
+     * Cancels the pressed state of this cell view. This method should be used
+     * in a situation when the cell view has been brought to the pressed state
+     * and this state needs to be undone, effectively bringing the view to the
+     * default state.
      */
     void unpressMouse(){
         if (isRevealed)
             return;
         setUnpressed();
     }
-    
+   
+    /**
+     * Sets pressed look.
+     */
     private void setPressed(){
         isPressed= true;
         setBorder(borderRevealed);
@@ -105,19 +138,31 @@ public class CellView extends JPanel {
         repaint();
     }
     
+    /**
+     * Sets 'unpressed' look.
+     */
     private void setUnpressed(){
         isPressed = false;
         setBorder(border);
         repaint(); // Paint back to normal.
     }
     
+   /**
+    * Adds specified observer to receive the cell view
+    * events from this cell view.
+    * @param listener listener to be added
+    */
     public void addListener(CellViewObserver listener){
         listeners.add(listener);
     }
     
-
-    
-    public void update(){
+    /**
+     * Instructs this cell view to update its look according
+     * to the underlying cell information and it's current state.
+     * This method should be invoked when the cell backing this cell view
+     * has changed its state.
+     */
+    public void updateLook(){
         if (cellInfo.isRevealed()){
             isRevealed = true;
             setRevealedLook();
@@ -133,11 +178,18 @@ public class CellView extends JPanel {
     	
         label.setIcon(icon);
     }
-    
+   
+    /**
+     * Returns coordinate of this cell view's cell.
+     * @return cell's coordinate
+     */
     public Coordinate getCoordinate(){
         return cellInfo.getCoordinate();
     }
-
+    
+    /**
+     * Sets the reveal look.
+     */
     private void setRevealedLook(){
         Icon icon = null;
         setBorder(borderRevealed);
@@ -157,7 +209,10 @@ public class CellView extends JPanel {
         label.setIcon(icon);
     }
     
-    
+   /**
+    * Fires button activated event to all observers
+    * for a given button type. 
+    */
     private void fireButtonActivated(ButtonAction button){
         if (button == ButtonAction.LEFT)
             for (CellViewObserver listener : listeners)
