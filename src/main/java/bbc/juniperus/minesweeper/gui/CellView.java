@@ -45,7 +45,7 @@ public class CellView extends JPanel {
     private boolean isRevealed;
     private JLabel label;
     private CellInfo cellInfo;
-    private Set<CellGuiObserver> listeners = new HashSet<CellGuiObserver>();
+    private Set<CellViewObserver> listeners = new HashSet<CellViewObserver>();
     private boolean isPressed;
     
     public CellView(final CellInfo  cellInfo){
@@ -111,7 +111,7 @@ public class CellView extends JPanel {
         repaint(); // Paint back to normal.
     }
     
-    public void addListener(CellGuiObserver listener){
+    public void addListener(CellViewObserver listener){
         listeners.add(listener);
     }
     
@@ -160,10 +160,10 @@ public class CellView extends JPanel {
     
     private void fireButtonActivated(ButtonAction button){
         if (button == ButtonAction.LEFT)
-            for (CellGuiObserver listener : listeners)
+            for (CellViewObserver listener : listeners)
                 listener.leftButtonActivated(cellInfo.getCoordinate());
         else
-            for (CellGuiObserver listener : listeners)
+            for (CellViewObserver listener : listeners)
                 listener.rightButtonActivated(cellInfo.getCoordinate());
     }
     

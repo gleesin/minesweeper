@@ -15,7 +15,7 @@ import bbc.juniperus.minesweeper.model.MineField;
  * and {@link GameView}. Some presentation logic is also part of the game view.
  *
  */
-public class GameController implements CellGuiObserver{
+public class GameController implements CellViewObserver{
 
     private MineField field; 
     private GameView gamePane;
