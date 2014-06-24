@@ -11,8 +11,14 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 /**
- * Singleton manager for the resources used by the game. Before using it, {@link initialize()}
- * needs to be invoked. This ensured that all resources are loaded from the file system.
+ * A resource loader for loading all the game resources (images and sounds) from the files.
+ * 
+ * It is intended to be singleton. 
+ * 
+ * Before it can be used , {@link initialize()}
+ * needs to be invoked. 
+ * 
+ * This ensures that all resources are loaded from the file system at the time controlled by the client.
  *
  */
 public class ResourceLoader {
@@ -43,9 +49,14 @@ public class ResourceLoader {
     private static ResourceLoader instance;
     private boolean initialized;
 
-    
+    /**
+     * A type of sound resource.
+     */
     public enum SoundResource {EXPLOSION, TICK, WIN}
     
+    /**
+     * A type of image resource.
+     */
     public enum  ImageResource {
         MINE(MINE_IMG_WIDTH), 
         CROSSED_MINE(MINE_IMG_WIDTH),
@@ -59,6 +70,11 @@ public class ResourceLoader {
         }
     	
     };
+    
+    /**
+     * A type of image resource which is actually a collection
+     * of related pictures located in one file.
+     */
     public enum  ImageSetResource {
         MINEFIELD_NUMBERS(MINEFIELD_NUMBER_IMG_WIDTH),
         DISPLAY_NUMBERS(DISPLAY_NUMBER_IMG_WIDTH),
@@ -77,9 +93,10 @@ public class ResourceLoader {
      */
     private ResourceLoader(){}
 
+
     /**
      * Returns singleton instance.
-     * @return singleton instance of ResourceManager
+     * @return singleton instance of resource loader
      */
     synchronized public static ResourceLoader getInstance(){
         if (instance == null)
@@ -88,7 +105,11 @@ public class ResourceLoader {
     }
     
     
-    
+   /**
+    * Returns an URL of a given sound resource. 
+    * @param sound the sound resource which URL should be retrieved
+    * @return the URL of the sound resource
+    */
     public URL getSoundResourceUrl(SoundResource sound){
 
         String path;
@@ -105,32 +126,33 @@ public class ResourceLoader {
     }
     
     
-    
-    
-    
-    public Image getApplicationImage(){
+    /**
+     * Returns an image which represents the application icon.
+     * @return the image to be used as application icon
+     */
+    public Image getApplicationIcon(){
         return appImage;
     }
     
     /**
-     * Initializes the resource manager.
-     * Loads all the resources. This method mut be invoked before any
+     * Initialises the resource manager.
+     * Loads all the resources. This method must be invoked before any
      * resource retrieval method is called.
      * @throws ResourceLoadingException when there was a problem during loading a resource
      */
     public void initialize() throws ResourceLoadingException {
     	
         try {
-            minefieldNumbers = loadImagesFromSprite(PATH_MINEFIELD_NUMBERS, MINEFIELD_NUMBER_IMG_WIDTH,8);
+            minefieldNumbers = loadImagesFromFile(PATH_MINEFIELD_NUMBERS, MINEFIELD_NUMBER_IMG_WIDTH,8);
             imgFlag = loadImg(PATH_FLAG);
             imgQuestionMark = loadImg(PATH_QUESTION_MARK);
         	
-            Image[] mines = loadImagesFromSprite(PATH_MINES, MINE_IMG_WIDTH, 2);
+            Image[] mines = loadImagesFromFile(PATH_MINES, MINE_IMG_WIDTH, 2);
             imgMine = mines[0];
             imgCrossedMine = mines[1];
         	
-            displayNumbers = loadImagesFromSprite(PATH_DISPLAY_NUMBERS, DISPLAY_NUMBER_IMG_WIDTH, 11);
-            faces = loadImagesFromSprite(PATH_FACES, FACE_IMG_WIDTH, 4);
+            displayNumbers = loadImagesFromFile(PATH_DISPLAY_NUMBERS, DISPLAY_NUMBER_IMG_WIDTH, 11);
+            faces = loadImagesFromFile(PATH_FACES, FACE_IMG_WIDTH, 4);
         	
             appImage = loadImg(PATH_APP_ICON);
         	
@@ -144,12 +166,12 @@ public class ResourceLoader {
 
     
     /**
-     * Returns icons array for mine field numbers for the given icon width. Numbers range from 1 to 8. The icon for number <code>n</code>
+     * Returns an icons array for mine-field numbers for the given icon width. Numbers range from 1 to 8. The icon for number <code>n</code>
      * is in the returned array on position <code>n - 1</code>.  The original image width is {@link #MINEFIELD_NUMBER_IMG_WIDTH} and the
      * image is scaled based on the proportion of the given width to this original width.<br> 
      * 
      * @param width the width of the icons
-     * @return newly created icon array from the mine field number images
+     * @return the newly created icon array from the mine field number images
      */
     public Icon[] createIconSet(ImageSetResource type, int width){
         checkIfInitialized();
@@ -177,7 +199,12 @@ public class ResourceLoader {
     }
     
 
-
+    /**
+     * Creates and returns an icon from a given image resource with the given width.
+     * @param type the type of the image resource
+     * @param width the desired width of the icon
+     * @return a new image icon with a given image
+     */
     public Icon createIcon(ImageResource type, int width){
         checkIfInitialized();
     
@@ -200,14 +227,17 @@ public class ResourceLoader {
     }
     
 
-    
-    
-    
-
+    /**
+     * Creates a new image icon from an image which is before scaled
+     * according to the specified scale factor.
+     */
     private Icon getScaledImageIcon(Image originalImg, float scaleFactor){
         return new ImageIcon(getScaledImage(originalImg,scaleFactor));
     }
     
+    /**
+     * Return a new instance of image scaled according to the specified scale factor.
+     */
     private Image getScaledImage(Image originalImg, float scaleFactor){
         int h = Math.round(scaleFactor * originalImg.getHeight(null));
         int w = Math.round(scaleFactor  * originalImg.getWidth(null));
@@ -218,15 +248,31 @@ public class ResourceLoader {
     
     
     /**
-     * Throws exception if not.
-     * @throw {@link IllegalStateException} if the manager is not initialized
+     * Check if this resource loader is in initialised state and throws
+     * an exception if it is not.
+     * @throw {@link IllegalStateException} if the manager is not initialised
      */
     private void checkIfInitialized(){
         if (!initialized)
             throw new IllegalStateException("The resource manager has not been initialized yet.");
     }
     
-    private Image[] loadImagesFromSprite(String imgPath, int width, int count) throws URISyntaxException, IOException{
+    /**
+     * Creates an image array from a image file. The sub-images with the same height as 
+     * the original image and each with the same width will be created by
+     * retrieving the part of the original image using the logic:<br><br>
+     * 
+     *  <i>n-th</i> image = view port of the parent image on  <i>n</i> * <b>width</b> - <i>(n + 1)</i> * <b>width</b>
+     *  X coordinates (the height of the sub-image stays the same as the height of the original image)
+     * 
+     * @param imgPath path to the file containing the image
+     * @param width the width of the sub-images
+     * @param count the number of sub-image to be made
+     * @return
+     * @throws URISyntaxException
+     * @throws IOException
+     */
+    private Image[] loadImagesFromFile(String imgPath, int width, int count) throws URISyntaxException, IOException{
         URL url = getClass().getResource(imgPath);
         BufferedImage img = ImageIO.read(url);
     	
@@ -239,12 +285,14 @@ public class ResourceLoader {
                     0, width, height);
     	
     	
-    	
         return result;
     }
     
-    
-    
+    /**
+     * Loads the image from the resource file on the specified path.
+     * @throws URISyntaxException
+     * @throws IOException
+     */
     private Image loadImg(String path) throws URISyntaxException, IOException{
         URL url = getClass().getResource(path);
         return ImageIO.read(url);

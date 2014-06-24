@@ -11,6 +11,10 @@ import javax.media.Time;
 
 import bbc.juniperus.minesweeper.gui.ResourceLoader.SoundResource;
 
+/**
+ * A player which plays various sounds in the game.
+ * The player must be initialised before it can be used to play sounds.
+ */
 public class SoundPlayer {
     
     private Player explosionPlayer, tickPlayer, winPlayer;
@@ -18,12 +22,16 @@ public class SoundPlayer {
     private boolean isInitialized;
     private MediaLocator a,b,c;
 
-
+    /**
+     * Creates a new sound player and retrieved the URLs of the 
+     * sound resources from {@link ResourceLoader} singleton. Resource
+     * loader must be initialised before-hand.
+     */
     public SoundPlayer() {
+    	//TODO REFACTOR!!!
          urlExplosion = ResourceLoader.getInstance().getSoundResourceUrl(SoundResource.EXPLOSION);
          urlTick = ResourceLoader.getInstance().getSoundResourceUrl(SoundResource.TICK);
          urlWin = ResourceLoader.getInstance().getSoundResourceUrl(SoundResource.WIN);
-         System.out.println(urlExplosion);
          
          a = new MediaLocator(urlExplosion);
          b = new MediaLocator(urlTick);
@@ -31,7 +39,11 @@ public class SoundPlayer {
          
          
     }
-    
+   
+    /**
+     * 
+     * @throws ResourceLoadingException
+     */
     public void initialize() throws ResourceLoadingException{
         try {
             explosionPlayer = Manager.createPlayer(a);
@@ -49,28 +61,36 @@ public class SoundPlayer {
     	
         isInitialized = true;
     }
-    
+   
+    /**
+     * Checks if this player is initialised and if not throws an exception.
+     */
     private void ensureInitialized(){
         if (!isInitialized)
             throw new IllegalStateException("The player is not initialized");
     }
     
-    public boolean isInitialized(){
-        return isInitialized;
-    }
-    
+    /**
+     * Plays an explosion sounds.
+     */
     public void playExplosionSound(){
         ensureInitialized();
         explosionPlayer.setMediaTime(new Time(0));
         explosionPlayer.start();
     } 
 
+    /**
+     * Plays a tick sound.
+     */
     public void playTickSound(){
         ensureInitialized();
         tickPlayer.setMediaTime(new Time(0));
         tickPlayer.start();
     } 
 
+    /**
+     * Plays a 'game-won' sound.
+     */
     public void playWinSound(){
         ensureInitialized();
         winPlayer.setMediaTime(new Time(0));

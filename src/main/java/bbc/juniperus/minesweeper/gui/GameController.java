@@ -37,7 +37,6 @@ public class GameController implements CellViewObserver{
         this.field = new MineField(options.getColumCount(),options.getRowCount(), options.getMineCount());
         this.gamePane = gameView;
         this.options = options;
-        assert soundPlayer.isInitialized();
         this.soundPlayer = soundPlayer;
     	
         gameView.addFaceButtonListener(new ActionListener(){
