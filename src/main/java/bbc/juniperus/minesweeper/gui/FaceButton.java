@@ -21,7 +21,6 @@ public class FaceButton extends JButton{
     private static final Border INSIDE_BORDER = new MineSweeperBorder(2,GameView.LIGHT_COLOR,GameView.DARK_COLOR);
     private static final Border INSIDE_BORDER_PRESSED = BorderFactory.createMatteBorder(1, 1, 0, 0, GameView.DARK_COLOR);
     private static final Border OUTSIDE_BORDER = new MineSweeperBorder(1,GameView.DARK_COLOR,GameView.DARK_COLOR);
-    //private static final Border OUTSIDE_BORDER = BorderFactory.createLineBorder(Color.black);
     private static final Border BORDER = BorderFactory.createCompoundBorder(OUTSIDE_BORDER, INSIDE_BORDER);
     private static final Border BORDER_PRESSED = BorderFactory.createCompoundBorder(OUTSIDE_BORDER, INSIDE_BORDER_PRESSED);
     
