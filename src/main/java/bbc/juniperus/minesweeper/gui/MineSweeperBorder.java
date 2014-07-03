@@ -8,8 +8,10 @@ import java.awt.Insets;
 import javax.swing.border.Border;
 
 /**
- * A custom implementation of border used in the game view components
- * copying the Windows XP Minesweeper look.
+ * A custom implementation of border used in the game view components which
+ * copy the Windows XP Minesweeper look. The border has raised border look
+ * and has given width and one color used for top and left side and a second
+ * color for bottom and right sides.
  */
 public class MineSweeperBorder implements Border{
 
@@ -18,10 +20,10 @@ public class MineSweeperBorder implements Border{
 
     
     /**
-     * 
-     * @param width
-     * @param topLeft
-     * @param bottomRight
+     * Constructs a mine sweeper border with given two colours and width. 
+     * @param width the width of the border
+     * @param topLeft the colour of the top and left side of the border
+     * @param bottomRight the colour of the bottom and right side of the border
      */
     public MineSweeperBorder(int width, Color topLeft, Color bottomRight){
         borderWidth = width;

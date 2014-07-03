@@ -118,7 +118,7 @@ public class Main {
     	
         frame = new JFrame();
         frame.setTitle(TITLE);
-        frame.setIconImage(ResourceLoader.getInstance().getApplicationImage());
+        frame.setIconImage(ResourceLoader.getInstance().getApplicationIcon());
         frame.setResizable(false);
         frame.setJMenuBar(menuBar);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
