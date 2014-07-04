@@ -2,17 +2,11 @@ package bbc.juniperus.minesweeper.gui;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.concurrent.CountDownLatch;
 
 import javax.media.Manager;
 import javax.media.NoPlayerException;
 import javax.media.Player;
 import javax.media.Time;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineEvent;
-import javax.sound.sampled.LineListener;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
