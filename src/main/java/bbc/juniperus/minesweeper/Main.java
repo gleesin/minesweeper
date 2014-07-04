@@ -77,7 +77,7 @@ public class Main {
         } catch (ClassNotFoundException | InstantiationException
                 | IllegalAccessException | UnsupportedLookAndFeelException e1) {
             // TODO Auto-generated catch block
-            e1.printStackTrace();
+        	System.out.println("GTK not available");
         	
         }
         try {

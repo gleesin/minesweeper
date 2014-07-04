@@ -40,9 +40,9 @@ public class SoundPlayer {
             JarDataSource jdsExplosion = new JarDataSource(urlExplosion);
             jdsExplosion.connect();
             JarDataSource jdsTick = new JarDataSource(urlTick);
-            jdsExplosion.connect();
+            jdsTick.connect();
             JarDataSource jdsWin = new JarDataSource(urlWin);
-            jdsExplosion.connect();
+            jdsWin.connect();
 
             explosionPlayer = Manager.createPlayer(jdsExplosion);
             explosionPlayer.realize();
@@ -55,6 +55,9 @@ public class SoundPlayer {
             throw new ResourceLoadingException(
                     "Could not initialize the sound player", e);
         } catch (IOException e) {
+            throw new ResourceLoadingException(
+                    "Could not initialize the sound player", e);
+        }catch(Exception e){
             throw new ResourceLoadingException(
                     "Could not initialize the sound player", e);
         }
@@ -90,29 +93,12 @@ public class SoundPlayer {
     }
     
     
-    public static void main(String[] args) throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException{
-       System.out.println("Starting");
-       Clip clip = AudioSystem.getClip();
-       URL url = ResourceLoader.getInstance().getSoundResourceUrl(
-               SoundResource.WIN);
-       AudioInputStream audio = AudioSystem.getAudioInputStream(url);
-       clip.open(audio);
-       clip.start();
-
-       final CountDownLatch clipDone = new CountDownLatch(1);
-       clip.addLineListener(new LineListener() {
-           @Override
-           public void update(LineEvent event) {
-               if (event.getType() == LineEvent.Type.STOP) {
-                   event.getLine().close();
-                   clipDone.countDown();
-               }
-           }
-       });
-       // play the sound clip and wait until it is done
-       clip.start();
-       clipDone.await();
-       System.out.println("FInito");
+    public static void main(String[] args) throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException, NoPlayerException{
+    	  JarDataSource jdsExplosion = new JarDataSource(null);
+          jdsExplosion.connect();
+          Player player  = Manager.createPlayer(jdsExplosion);
+          player.realize();
+          player.start();
     }
 
 }
