@@ -16,17 +16,16 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
-import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import sk.lkce.minesweeper.gui.AboutDialog;
 import sk.lkce.minesweeper.gui.GameController;
 import sk.lkce.minesweeper.gui.GameOptions;
+import sk.lkce.minesweeper.gui.GameOptions.Difficulty;
 import sk.lkce.minesweeper.gui.GameView;
 import sk.lkce.minesweeper.gui.ResourceLoader;
 import sk.lkce.minesweeper.gui.ResourceLoadingException;
 import sk.lkce.minesweeper.gui.SoundPlayer;
-import sk.lkce.minesweeper.gui.GameOptions.Difficulty;
 
 /**
  * Entry class of the application. Contains also inner action classes.
