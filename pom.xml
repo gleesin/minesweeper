@@ -21,11 +21,12 @@
 		</dependency>
 	</dependencies>
 	<build>
-	<finalName>${artifactId}</finalName>
+		<finalName>${project.artifactId}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.5.1</version>
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
@@ -43,7 +44,7 @@
 						<configuration>
 							<appendAssemblyId>false</appendAssemblyId>
 							<descriptors>
-								<descriptor>/src/main/assembly/assembly-win.xml</descriptor>
+								<!--<descriptor>/src/main/assembly/assembly-win.xml</descriptor> -->
 								<descriptor>/src/main/assembly/assembly-nix.xml</descriptor>
 							</descriptors>
 							<descriptorRefs>
@@ -51,18 +52,12 @@
 							</descriptorRefs>
 							<archive>
 								<manifest>
-									<mainClass>bbc.juniperus.minesweeper.Main</mainClass>
+									<mainClass>sk.lkce.minesweeper.MinesweeperMain</mainClass>
 								</manifest>
 							</archive>
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>com.akathist.maven.plugins.launch4j</groupId>
@@ -77,14 +72,14 @@
 						</goals>
 						<configuration>
 							<headerType>gui</headerType>
-							<jar>target/${project.build.finalName}.jar</jar> 
+							<jar>target/${project.build.finalName}.jar</jar>
 							<outfile>target/${project.build.finalName}.exe</outfile>
 							<classPath>
-								<mainClass>bbc.juniperus.minesweeper.Main</mainClass>
+								<mainClass>sk.lkce.minesweeper.MinesweeperMain</mainClass>
 							</classPath>
 							<icon>src/main/resources/icon.ico</icon>
 							<jre>
-								<minVersion>1.6.0</minVersion>
+								<minVersion>1.7.0</minVersion>
 							</jre>
 							<versionInfo>
 								<fileVersion>1.0.0.0</fileVersion>

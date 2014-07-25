@@ -1,4 +1,4 @@
-package bbc.juniperus.minesweeper.gui;
+package sk.lkce.minesweeper.gui;
 
 /**
  * A data holder object which stored the current game settings.

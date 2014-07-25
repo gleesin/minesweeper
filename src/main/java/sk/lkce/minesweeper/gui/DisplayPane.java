@@ -1,4 +1,4 @@
-package bbc.juniperus.minesweeper.gui;
+package sk.lkce.minesweeper.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;

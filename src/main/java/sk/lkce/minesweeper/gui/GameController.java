@@ -1,4 +1,4 @@
-package bbc.juniperus.minesweeper.gui;
+package sk.lkce.minesweeper.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,9 +6,9 @@ import java.util.List;
 
 import javax.swing.Timer;
 
-import bbc.juniperus.minesweeper.model.CellInfo;
-import bbc.juniperus.minesweeper.model.Coordinate;
-import bbc.juniperus.minesweeper.model.MineField;
+import sk.lkce.minesweeper.model.CellInfo;
+import sk.lkce.minesweeper.model.Coordinate;
+import sk.lkce.minesweeper.model.MineField;
 
 /**
  * A controller of the game logic. A mediator between {@link MineField}
@@ -149,6 +149,8 @@ public class GameController implements CellViewObserver{
             gameOver(false);
         else if (field.isGameWon())
             gameOver(true);
+        
+        //System.out.println(field.debugImg());
     }
     
     @Override

@@ -1,4 +1,4 @@
-package bbc.juniperus.minesweeper.gui;
+package sk.lkce.minesweeper.gui;
 
 import java.io.IOException;
 import java.net.URL;
@@ -10,7 +10,7 @@ import javax.media.Time;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import bbc.juniperus.minesweeper.gui.ResourceLoader.SoundResource;
+import sk.lkce.minesweeper.gui.ResourceLoader.SoundResource;
 
 public class SoundPlayer {
 

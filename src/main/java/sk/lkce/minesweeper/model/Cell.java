@@ -1,4 +1,4 @@
-package bbc.juniperus.minesweeper.model;
+package sk.lkce.minesweeper.model;
 
 
 /**

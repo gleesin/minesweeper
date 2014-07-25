@@ -1,4 +1,4 @@
-package bbc.juniperus.minesweeper.gui;
+package sk.lkce.minesweeper.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -20,7 +20,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import bbc.juniperus.minesweeper.gui.ResourceLoader.SoundResource;
+import sk.lkce.minesweeper.gui.ResourceLoader.SoundResource;
 
 /**
  * A modal dialog which shows the information about the application and the

@@ -1,4 +1,4 @@
-package bbc.juniperus.minesweeper.gui;
+package sk.lkce.minesweeper.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -9,9 +9,9 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-import bbc.juniperus.minesweeper.gui.FaceButton.Face;
-import bbc.juniperus.minesweeper.model.Coordinate;
-import bbc.juniperus.minesweeper.model.GameInfo;
+import sk.lkce.minesweeper.gui.FaceButton.Face;
+import sk.lkce.minesweeper.model.Coordinate;
+import sk.lkce.minesweeper.model.GameInfo;
 
 /**
  * A game view. Contains also some presentation logic. It should be the only interface for interacting

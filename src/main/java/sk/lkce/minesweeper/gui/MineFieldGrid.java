@@ -1,4 +1,4 @@
-package bbc.juniperus.minesweeper.gui;
+package sk.lkce.minesweeper.gui;
 
 import java.awt.Component;
 import java.awt.GridLayout;
@@ -12,10 +12,10 @@ import java.util.Map;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-import bbc.juniperus.minesweeper.gui.FaceButton.Face;
-import bbc.juniperus.minesweeper.model.CellInfo;
-import bbc.juniperus.minesweeper.model.Coordinate;
-import bbc.juniperus.minesweeper.model.GameInfo;
+import sk.lkce.minesweeper.gui.FaceButton.Face;
+import sk.lkce.minesweeper.model.CellInfo;
+import sk.lkce.minesweeper.model.Coordinate;
+import sk.lkce.minesweeper.model.GameInfo;
 
 /**
  * A component which displays the mine-field cell grid. It consists

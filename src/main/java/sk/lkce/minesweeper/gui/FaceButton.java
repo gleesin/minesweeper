@@ -1,4 +1,4 @@
-package bbc.juniperus.minesweeper.gui;
+package sk.lkce.minesweeper.gui;
 
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
@@ -9,7 +9,7 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.border.Border;
 
-import bbc.juniperus.minesweeper.gui.ResourceLoader.ImageSetResource;
+import sk.lkce.minesweeper.gui.ResourceLoader.ImageSetResource;
 
 /**
  * A minesweeper button with a face on it which 

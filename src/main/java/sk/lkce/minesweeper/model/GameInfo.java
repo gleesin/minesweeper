@@ -1,4 +1,4 @@
-package bbc.juniperus.minesweeper.model;
+package sk.lkce.minesweeper.model;
 
 /**
  *  Read-only collection of basic information about the mine-field intended to be used 

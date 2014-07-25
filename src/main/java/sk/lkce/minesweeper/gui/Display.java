@@ -1,4 +1,4 @@
-package bbc.juniperus.minesweeper.gui;
+package sk.lkce.minesweeper.gui;
 
 import java.awt.GridLayout;
 
@@ -6,7 +6,7 @@ import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import bbc.juniperus.minesweeper.gui.ResourceLoader.ImageSetResource;
+import sk.lkce.minesweeper.gui.ResourceLoader.ImageSetResource;
 
 /**
  * A Swing display  which shows a 3 digit number.

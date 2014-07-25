@@ -1,4 +1,4 @@
-package bbc.juniperus.minesweeper.gui;
+package sk.lkce.minesweeper.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -14,10 +14,10 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
-import bbc.juniperus.minesweeper.gui.ResourceLoader.ImageResource;
-import bbc.juniperus.minesweeper.gui.ResourceLoader.ImageSetResource;
-import bbc.juniperus.minesweeper.model.CellInfo;
-import bbc.juniperus.minesweeper.model.Coordinate;
+import sk.lkce.minesweeper.gui.ResourceLoader.ImageResource;
+import sk.lkce.minesweeper.gui.ResourceLoader.ImageSetResource;
+import sk.lkce.minesweeper.model.CellInfo;
+import sk.lkce.minesweeper.model.Coordinate;
 
 /**
  * A Swing component view for a mine-field cell in style of Windows XP Minesweeper.

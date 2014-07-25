@@ -1,6 +1,6 @@
-package bbc.juniperus.minesweeper.gui;
+package sk.lkce.minesweeper.gui;
 
-import bbc.juniperus.minesweeper.model.Coordinate;
+import sk.lkce.minesweeper.model.Coordinate;
 
 
 /**
