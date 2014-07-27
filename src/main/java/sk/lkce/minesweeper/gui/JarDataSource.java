@@ -17,6 +17,9 @@ import javax.media.protocol.PullSourceStream;
 import javax.media.protocol.Seekable;
 
 /**
+ * A data source for the sound files in jar. Copy of the 
+ * code from stackoverflow.com http://stackoverflow.com/questions/8304940/how-to-load-media-resources-from-the-classpath-in-jmf
+ * 
  * @author Mark A. Ziesemer
  *  <a href="http://www.ziesemer.com.">&lt;www.ziesemer.com&gt;</a>
  */
